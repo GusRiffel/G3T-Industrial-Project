@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  frontend:
+    container_name: g3t-reactapp
+    build:
+      context: .
+    volumes:
+      - ./src:/app/src
+    ports:
+      - 3333:3333

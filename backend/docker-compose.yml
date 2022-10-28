@@ -1,0 +1,8 @@
+version: "3"
+services:
+  backend:
+    container_name: g3t-nodeapp
+    build:
+      dockerfile: Dockerfile
+    ports: 
+     - 3000:3000
