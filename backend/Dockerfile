@@ -3,9 +3,9 @@ FROM node:18
 WORKDIR /app
 
 COPY package*.json ./
+COPY prisma ./ 
+COPY . .
 
 RUN npm install
-
-COPY . .
 
 ENTRYPOINT  npm run start 
