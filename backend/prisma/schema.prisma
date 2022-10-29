@@ -1,0 +1,19 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model zones {
+  id            Int      @id @default(autoincrement())
+  country       String   @db.VarChar(255)
+  land_zone     String?  @db.VarChar(255)
+  mobile_zone   String?  @db.VarChar(255)
+  land_tariff   String?  @db.VarChar(255)
+  mobile_tariff String?  @db.VarChar(255)
+  mobile        Boolean?
+  landline      Boolean?
+}
