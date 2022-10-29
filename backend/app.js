@@ -3,17 +3,14 @@ const app = express();
 const port = 3000; 
 const cors = require("cors");
 
+const zonesRouter = require("./src/router/zones");
+
 app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
 
-app.get("/", (req, res) => {
-  res.send("Hello Worlds"); 
-});
-
-app.get("/cachorro", (req, res) => {
-  res.send("Hello Cachorros"); 
-});
+app.use(zonesRouter);
 
 app.listen(port, () => {
   console.log(`Now listening on port ${port}`);
-  console.log("Alterou");
 });
