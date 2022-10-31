@@ -37,6 +37,82 @@ exports.findAllCountries = async (req, res) => {
   return res.status(200).json(countries);
 };
 
+exports.findAllCountriesByMobileTariff = async (req, res) => {
+  let countries;
+
+  try {
+    countries = await prisma.zones.findMany({
+      select: {
+        country: true,
+        mobile_tariff: true,
+      },
+      where: {
+        mobile: true
+      },
+    });
+  } catch (error) {
+    res.status(404).send({ message: error });
+  }
+  return res.status(200).json(countries);
+};
+
+exports.findAllCountriesByLandLineTariff = async (req, res) => {
+  let countries;
+
+  try {
+    countries = await prisma.zones.findMany({
+      select: {
+        country: true,
+        land_tariff: true,
+      },
+      where: {
+        landline: true
+      },
+    });
+  } catch (error) {
+    res.status(404).send({ message: error });
+  }
+  return res.status(200).json(countries);
+};
+
+exports.findAllLandLineZones = async (req, res) => {
+  let countries;
+
+  try {
+    countries = await prisma.zones.findMany({
+      select: {
+        country: true,
+        land_zone: true,
+      },
+      where: {
+        landline: true
+      },
+    });
+  } catch (error) {
+    res.status(404).send({ message: error });
+  }
+  return res.status(200).json(countries);
+};
+
+exports.findAllMobilesZones = async (req, res) => {
+  let countries;
+
+  try {
+    countries = await prisma.zones.findMany({
+      select: {
+        country: true,
+        mobile_zone: true,
+      },
+      where: {
+        mobile: true
+      },
+    });
+  } catch (error) {
+    res.status(404).send({ message: error });
+  }
+  return res.status(200).json(countries);
+};
+
 exports.findById = async (req, res) => {
   let record;
   try {
