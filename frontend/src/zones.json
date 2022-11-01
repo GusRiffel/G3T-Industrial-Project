@@ -1,0 +1,50 @@
+[
+    {
+        "id": 1,
+        "type": "landline",
+        "name": "Zone 1",
+        "tariff": 0.01
+    },
+    {
+        "id": 2,
+        "type": "landline",
+        "name": "Zone 2",
+        "tariff": 0.02
+    },
+    {
+        "id": 3,
+        "type": "landline",
+        "name": "Zone 3",
+        "tariff": 0.03
+    },
+    {
+        "id": 4,
+        "type": "landline",
+        "name": "Zone 4",
+        "tariff": 0.04
+    },
+    {
+        "id": 5,
+        "type": "mobile",
+        "name": "Zone A",
+        "tariff": 0.01
+    },
+    {
+        "id": 6,
+        "type": "mobile",
+        "name": "Zone B",
+        "tariff": 0.02
+    },
+    {
+        "id": 7,
+        "type": "mobile",
+        "name": "Zone C",
+        "tariff": 0.03
+    },
+    {
+        "id": 8,
+        "type": "mobile",
+        "name": "Zone D",
+        "tariff": 0.05
+    }
+]
