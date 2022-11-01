@@ -1,6 +1,8 @@
 const { PrismaClient } = require("@prisma/client");
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+  log: ["query"],
+});
 
 exports.create = async (req, res) => {
   let newRecord;
@@ -23,14 +25,10 @@ exports.create = async (req, res) => {
   return res.status(201).json(newRecord);
 };
 
-exports.findAllCountries = async (req, res) => {
+exports.findAll = async (req, res) => {
   let countries;
   try {
-    countries = await prisma.zones.findMany({
-      select: {
-        country: true,
-      },
-    });
+    countries = await prisma.zones.findMany();
   } catch (error) {
     res.status(404).send({ message: error });
   }
@@ -47,7 +45,7 @@ exports.findAllCountriesByMobileTariff = async (req, res) => {
         mobile_tariff: true,
       },
       where: {
-        mobile: true
+        mobile: true,
       },
     });
   } catch (error) {
@@ -66,7 +64,7 @@ exports.findAllCountriesByLandLineTariff = async (req, res) => {
         land_tariff: true,
       },
       where: {
-        landline: true
+        landline: true,
       },
     });
   } catch (error) {
@@ -85,7 +83,7 @@ exports.findAllLandLineZones = async (req, res) => {
         land_zone: true,
       },
       where: {
-        landline: true
+        landline: true,
       },
     });
   } catch (error) {
@@ -104,13 +102,49 @@ exports.findAllMobilesZones = async (req, res) => {
         mobile_zone: true,
       },
       where: {
-        mobile: true
+        mobile: true,
       },
     });
   } catch (error) {
     res.status(404).send({ message: error });
   }
   return res.status(200).json(countries);
+};
+
+exports.findAvailableLinesByCountry = async (req, res) => {
+  let countries;
+
+  try {
+    countries = await prisma.zones.findMany({
+      select: {
+        land_zone: true,
+        land_tariff: true,
+        mobile_zone: true,
+        mobile_tariff: true,
+      },
+      where: {
+        country: req.params.country,
+      },
+    });
+  } catch (error) {
+    res.status(404).send({ message: error });
+  }
+  return res.status(200).json(countries);
+};
+
+exports.findByZone = async (req, res) => {
+  let record;
+  let zone = req.params.zone;
+  try {
+    record = await prisma.zones.findMany({
+      where: {
+        ...(Number(zone) ? { land_zone: zone } : { mobile_zone: zone }),
+      },
+    });
+  } catch (error) {
+    res.status(400).send({ message: error });
+  }
+  return res.status(201).json(record);
 };
 
 exports.findById = async (req, res) => {

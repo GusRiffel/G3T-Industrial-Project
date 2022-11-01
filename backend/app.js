@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
-app.use(zonesRouter);
+app.use("/api", zonesRouter);
 
 app.listen(port, () => {
   console.log(`Now listening on port ${port}`);
