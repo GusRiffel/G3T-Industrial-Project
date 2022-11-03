@@ -16,7 +16,7 @@ function App() {
         <Container>
           <Routes>
             <Route path='/' element={<HomeScreen />} />
-            <Route path='/zone' element={<ZoneScreen />} />
+            <Route path='/zones/:id' element={<ZoneScreen />} />
           </Routes>
         </Container>
       </main>
