@@ -8,18 +8,51 @@ import axios from 'axios';
 const Homescreen = () => {
   const [landline, setLandline] = useState(null);
   const [mobile, setMobile] = useState(null);
+  const [countries, setCountries] = useState(null);
   const [error, setError] = useState('');
   const [loaded, setLoaded] = useState(false);
+
+  const setZones = (data, zone) => {
+    const lines = []
+    if(zone == 'landline'){
+      data.forEach((value) => {
+        lines.push({
+          zone: value.land_zone,
+          tariff: value.land_tariff,
+        });
+      });
+    }else{
+      data.forEach((value) => {
+        lines.push({
+          zone: value.mobile_zone,
+          tariff: value.mobile_tariff,
+        });
+      });
+    }
+    
+    const unique_lines = [...new Map(lines.map(item => [item['zone'], item])).values()]
+    unique_lines.sort((a,b) => (a.zone > b.zone) ? 1 : ((b.zone > a.zone) ? -1 : 0));
+    return unique_lines
+  }
 
   useEffect(() => {
     const loadZones = async () => {
       try {
-        const landline = await axios.get('/api/zones/landline');
-        const mobile = await axios.get('/api/zones/mobile');
-        //const sorted = landline.data.sort((a,b) => (a.land_zone > b.land_zone) ? 1 : ((b.land_zone > a.land_zone) ? -1 : 0))
-        //console.log(sorted)
-        setLandline(landline.data.sort((a,b) => (a.land_zone > b.land_zone) ? 1 : ((b.land_zone > a.land_zone) ? -1 : 0)));
-        setMobile(mobile.data.sort((a,b) => (a.mobile_zone > b.mobile_zone) ? 1 : ((b.mobile_zone > a.mobile_zone) ? -1 : 0)));
+        const countries = await axios.get('/api/findAll');
+        setLandline(setZones(countries.data, 'landline'));
+        setMobile(setZones(countries.data, 'mobile'));
+        
+        const results = []
+        countries.data.forEach((value) => {
+          results.push({
+            key: value.country,
+            value: value.land_tariff,
+          });
+        });
+        setCountries([
+          {key: 'Select a country', value: ''}, 
+          ...results
+        ]);
       } catch (error) {
         setError(error);
       } finally {
@@ -29,7 +62,8 @@ const Homescreen = () => {
 
     loadZones();
   }, []);
-  //console.log(data)
+  //landline && console.log(landline)
+  //mobile && console.log(mobile)
 
   return (
     <>
@@ -50,7 +84,13 @@ const Homescreen = () => {
             </Col>
             <Col>
               <Form.Select>
-                <option>Select country</option>
+              {countries && countries.map((option) => {
+          return (
+            <option key={option.value} value={option.value}>
+              {option.key}
+            </option>
+          );
+        })}
               </Form.Select>
             </Col>
             <Col>

@@ -2,7 +2,7 @@ import React from 'react'
 import { useState, useEffect } from 'react';
 import { useParams} from 'react-router-dom';
 import axios from 'axios';
-import { Table } from 'react-bootstrap';
+import { Table, Row, Col } from 'react-bootstrap';
 
 const ZoneScreen = () => {
 
@@ -33,11 +33,21 @@ const ZoneScreen = () => {
 
     loadCountries();
   }, []);
-   console.log(countries)
+   countries && console.log(countries[0])
 
   return (
     <>
-    <h2>{landline ? `Landline zone ${params.id}` : `Mobile zone ${params.id}`}</h2>
+<Row>
+  <Col>
+  <h2>{landline ? `Landline zone ${params.id}` : `Mobile zone ${params.id}`}</h2>
+  </Col>
+  <Col>
+  <h6>Residential (GBP)</h6>
+  {countries && <h4>£ {landline ? countries[0].land_tariff : countries[0].mobile_tariff} pence</h4>}
+  </Col>
+</Row>
+<p>*International OFFnet Pricing By Destination /per Minute</p>
+    
     <Table striped bordered hover responsive className='table-sm'>
           <thead>
             <tr>
@@ -51,7 +61,7 @@ const ZoneScreen = () => {
               <tr key={country.id}>
                 <td>{i + 1}</td>
                 <td>{country.country}</td>
-                <td>{landline ? country.land_tariff : country.mobile_tariff}</td>
+                <td>£ {landline ? country.land_tariff : country.mobile_tariff} pence</td>
               </tr>
             ))}
           </tbody>
