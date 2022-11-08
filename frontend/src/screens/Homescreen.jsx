@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { Row, Col, Button, Form } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import zones from '../zones';
 import Zone from '../components/Zone';
 import axios from 'axios';
@@ -12,6 +13,8 @@ const Homescreen = () => {
   const [mobCountries, setMobCountries] = useState(null);
   const [landTariff, setLandTariff] = useState('');
   const [mobTariff, setMobTariff] = useState('');
+  const [selectedLand, setSelectedLand] = useState('');
+  const [selectedMob, setSelectedMob] = useState('');
   const [error, setError] = useState('');
   const [loaded, setLoaded] = useState(false);
 
@@ -42,6 +45,19 @@ const Homescreen = () => {
     return unique_lines;
   };
 
+  const handleLandSelect = (e) => {
+    setLandTariff(e.target.value);
+    const selected = document.getElementById('landSelect');
+    setSelectedLand(selected.options[selected.selectedIndex].text);
+  };
+
+  const handleMobSelect = (e) => {
+    setMobTariff(e.target.value);
+    const selected = document.getElementById('mobSelect');
+    setSelectedMob(selected.options[selected.selectedIndex].text);
+  };
+  console.log(selectedMob);
+  console.log(selectedLand);
 
   useEffect(() => {
     const loadZones = async () => {
@@ -57,7 +73,10 @@ const Homescreen = () => {
             value: value.land_tariff,
           });
         });
-        setLandCountries([{ key: 'Select a country', value: '' }, ...land_countries]);
+        setLandCountries([
+          { key: 'Select a country', value: '' },
+          ...land_countries,
+        ]);
 
         const mob_countries = [];
         countries.data.forEach((value) => {
@@ -66,8 +85,10 @@ const Homescreen = () => {
             value: value.mobile_tariff,
           });
         });
-        setMobCountries([{ key: 'Select a country', value: '' }, ...mob_countries]);
-
+        setMobCountries([
+          { key: 'Select a country', value: '' },
+          ...mob_countries,
+        ]);
       } catch (error) {
         setError(error);
       } finally {
@@ -77,8 +98,6 @@ const Homescreen = () => {
 
     loadZones();
   }, []);
-  //landline && console.log(landline)
-  //mobile && console.log(mobile)
 
   return (
     <>
@@ -98,7 +117,10 @@ const Homescreen = () => {
                 <h4 className="text-dark">Landlines</h4>
               </Col>
               <Col>
-                <Form.Select onChange={(e)=>{setLandTariff(e.target.value)}}>
+                <Form.Select
+                  id="landSelect"
+                  onChange={(e) => handleLandSelect(e)}
+                >
                   {landCountries &&
                     landCountries.map((option) => {
                       return <option value={option.value}>{option.key}</option>;
@@ -106,9 +128,13 @@ const Homescreen = () => {
                 </Form.Select>
               </Col>
               <Col>
-                {/* <Button variant="primary">Go</Button> */}
-                {<h5>£ {landTariff} pence p/min</h5>}
+                <Link to={selectedLand ? `/countries/${selectedLand}` : '/'}>
+                  <Button variant="primary">Go</Button>
+                </Link>
               </Col>
+            </Row>
+            <Row className="mt-3">
+              <Col>{landTariff && <h5>£ {landTariff} pence p/min</h5>}</Col>
             </Row>
           </Col>
           <Col>
@@ -117,17 +143,24 @@ const Homescreen = () => {
                 <h4 className="text-dark">Mobiles</h4>
               </Col>
               <Col>
-                <Form.Select onChange={(e)=>{setMobTariff(e.target.value)}}>
-                {mobCountries &&
+                <Form.Select
+                  id="mobSelect"
+                  onChange={(e) => handleMobSelect(e)}
+                >
+                  {mobCountries &&
                     mobCountries.map((option) => {
                       return <option value={option.value}>{option.key}</option>;
                     })}
                 </Form.Select>
               </Col>
               <Col>
-                {/* <Button variant="primary">Go</Button> */}
-                {<h5>£ {mobTariff} pence p/min</h5>}
+                <Link to={selectedMob ? `/countries/${selectedMob}` : '/'}>
+                  <Button variant="primary">Go</Button>
+                </Link>
               </Col>
+            </Row>
+            <Row className="mt-3">
+              <Col>{mobTariff && <h5>£ {mobTariff} pence p/min</h5>}</Col>
             </Row>
           </Col>
         </Row>
