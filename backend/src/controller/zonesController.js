@@ -8,15 +8,7 @@ exports.create = async (req, res) => {
   let newRecord;
   try {
     newRecord = await prisma.zones.create({
-      data: {
-        country: req.body.country,
-        land_zone: req.body.land_zone,
-        mobile_zone: req.body.mobile_zone,
-        land_tariff: req.body.land_tariff,
-        mobile_tariff: req.body.mobile_tariff,
-        mobile: req.body.mobile,
-        landline: req.body.landline,
-      },
+      data: {},
     });
   } catch (error) {
     res.status(400).send({ message: error });
@@ -117,6 +109,7 @@ exports.findAvailableLinesByCountry = async (req, res) => {
   try {
     countries = await prisma.zones.findMany({
       select: {
+        country: true,
         land_zone: true,
         land_tariff: true,
         mobile_zone: true,
