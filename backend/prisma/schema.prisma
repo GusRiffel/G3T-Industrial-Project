@@ -19,3 +19,10 @@ model zones {
   RateEU             String? @db.VarChar(255)
   RateUSD            String? @db.VarChar(255)
 }
+
+model users {
+  ID       Int    @id @default(autoincrement())
+  user     String @db.VarChar(100)
+  password String @db.VarChar(100)
+  role     String @db.VarChar(100)
+}
