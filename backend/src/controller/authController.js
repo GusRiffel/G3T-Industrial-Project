@@ -22,6 +22,14 @@ exports.signup = async (req, res) => {
     res.status(400).send("Wrong password");
   } else {
     const token = auth.createToken(user.user);
-    res.status(200).json({ accessToken: token });
+    res.status(200).json(token);
   }
+};
+
+exports.refreshToken = (req, res) => {
+  const refreshToken = req.body.token;
+  if (!refreshToken) return res.sendStatus(401);
+  const newToken = auth.createRefreshToken(refreshToken);
+  console.log(newToken);
+  res.json({ accessToken: newToken });
 };

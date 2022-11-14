@@ -1,8 +1,9 @@
 const express = require("express");
 const zonesRouter = express.Router();
+const auth = require("../security/authentication");
 const zonesController = require("../controller/zonesController");
 
-zonesRouter.get("/zones", zonesController.findAll);
+zonesRouter.get("/zones", auth.authenticateToken, zonesController.findAll);
 zonesRouter.get("/zones/landline", zonesController.findAllLandLineZones);
 zonesRouter.get("/zones/mobile", zonesController.findAllMobilesZones);
 zonesRouter.get("/zones/country/:country", zonesController.findAvailableLinesByCountry);
