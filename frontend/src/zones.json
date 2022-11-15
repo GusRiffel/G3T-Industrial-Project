@@ -3,7 +3,8 @@
         "id": 1,
         "type": "landline",
         "name": "Zone 1",
-        "tariff": 0.01
+        "tariff": 0.01,
+        "countries": ["Spain", "UK", "France"]
     },
     {
         "id": 2,
