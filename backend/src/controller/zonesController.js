@@ -153,6 +153,9 @@ exports.findAvailableLinesByCountry = async (req, res) => {
   } catch (error) {
     res.status(404).send({ message: error });
   }
+  if (!countries.length) {
+    return res.status(404).send({ message: "Country not found" });
+  }
   return res.status(200).json(countries);
 };
 
@@ -194,7 +197,7 @@ exports.update = async (req, res) => {
       },
       data: {
         MAGCode: req.body.MAGCode,
-        MAGDestination:req.body.MAGDestination,
+        MAGDestination: req.body.MAGDestination,
         Destination: req.body.Destination,
         Key: req.body.Key,
         Zone: req.body.Zone,

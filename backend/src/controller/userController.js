@@ -1,5 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
-const auth = require("../security/authentication");
+const auth = require("../security/jwt");
 
 const prisma = new PrismaClient({
   log: ["query"],
