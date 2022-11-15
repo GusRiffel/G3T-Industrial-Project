@@ -9,13 +9,15 @@ exports.create = async (req, res) => {
   try {
     newRecord = await prisma.zones.create({
       data: {
-        country: req.body.country,
-        land_zone: req.body.land_zone,
-        mobile_zone: req.body.mobile_zone,
-        land_tariff: req.body.land_tariff,
-        mobile_tariff: req.body.mobile_tariff,
-        mobile: req.body.mobile,
-        landline: req.body.landline,
+        MAGCode: req.body.MAGCode,
+        MAGDestination: req.body.MAGDestination,
+        Destination: req.body.Destination,
+        Key: req.body.Key,
+        Zone: req.body.Zone,
+        RateBusinessGBP: req.body.RateBusinessGBP,
+        RateResidentialGBP: req.body.RateResidentialGBP,
+        RateEU: req.body.RateEU,
+        RateUSD: req.body.RateUSD,
       },
     });
   } catch (error) {
@@ -40,12 +42,19 @@ exports.findAllCountriesByMobileTariff = async (req, res) => {
 
   try {
     countries = await prisma.zones.findMany({
-      select: {
-        country: true,
-        mobile_tariff: true,
-      },
       where: {
-        mobile: true,
+        NOT: {
+          OR: [
+            {
+              Zone: {
+                contains: "Z",
+              },
+            },
+            {
+              Zone: "?",
+            },
+          ],
+        },
       },
     });
   } catch (error) {
@@ -59,12 +68,17 @@ exports.findAllCountriesByLandLineTariff = async (req, res) => {
 
   try {
     countries = await prisma.zones.findMany({
-      select: {
-        country: true,
-        land_tariff: true,
-      },
       where: {
-        landline: true,
+        OR: [
+          {
+            Zone: {
+              contains: "Z",
+            },
+          },
+          {
+            Zone: "?",
+          },
+        ],
       },
     });
   } catch (error) {
@@ -74,41 +88,55 @@ exports.findAllCountriesByLandLineTariff = async (req, res) => {
 };
 
 exports.findAllLandLineZones = async (req, res) => {
-  let countries;
+  let zones;
 
   try {
-    countries = await prisma.zones.findMany({
-      select: {
-        country: true,
-        land_zone: true,
-      },
+    zones = await prisma.zones.groupBy({
+      by: ["Zone"],
       where: {
-        landline: true,
+        OR: [
+          {
+            Zone: {
+              contains: "Z",
+            },
+          },
+          {
+            Zone: "?",
+          },
+        ],
       },
     });
   } catch (error) {
     res.status(404).send({ message: error });
   }
-  return res.status(200).json(countries);
+  return res.status(200).json(zones);
 };
 
 exports.findAllMobilesZones = async (req, res) => {
-  let countries;
+  let zones;
 
   try {
-    countries = await prisma.zones.findMany({
-      select: {
-        country: true,
-        mobile_zone: true,
-      },
+    zones = await prisma.zones.groupBy({
+      by: ["Zone"],
       where: {
-        mobile: true,
+        NOT: {
+          OR: [
+            {
+              Zone: {
+                contains: "Z",
+              },
+            },
+            {
+              Zone: "?",
+            },
+          ],
+        },
       },
     });
   } catch (error) {
     res.status(404).send({ message: error });
   }
-  return res.status(200).json(countries);
+  return res.status(200).json(zones);
 };
 
 exports.findAvailableLinesByCountry = async (req, res) => {
@@ -116,14 +144,10 @@ exports.findAvailableLinesByCountry = async (req, res) => {
 
   try {
     countries = await prisma.zones.findMany({
-      select: {
-        land_zone: true,
-        land_tariff: true,
-        mobile_zone: true,
-        mobile_tariff: true,
-      },
       where: {
-        country: req.params.country,
+        Destination: {
+          contains: `%${req.params.country} %`,
+        },
       },
     });
   } catch (error) {
@@ -134,17 +158,17 @@ exports.findAvailableLinesByCountry = async (req, res) => {
 
 exports.findByZone = async (req, res) => {
   let record;
-  let zone = req.params.zone;
+  let zoneparam = req.params.zone;
   try {
     record = await prisma.zones.findMany({
       where: {
-        ...(Number(zone) ? { land_zone: zone } : { mobile_zone: zone }),
+        Zone: zoneparam,
       },
     });
   } catch (error) {
     res.status(400).send({ message: error });
   }
-  return res.status(201).json(record);
+  return res.status(200).json(record);
 };
 
 exports.findById = async (req, res) => {
@@ -152,7 +176,7 @@ exports.findById = async (req, res) => {
   try {
     record = await prisma.zones.findUniqueOrThrow({
       where: {
-        id: Number(req.params.id),
+        ID: Number(req.params.id),
       },
     });
   } catch (error) {
@@ -166,16 +190,18 @@ exports.update = async (req, res) => {
   try {
     updatedRecord = await prisma.zones.update({
       where: {
-        id: Number(req.params.id),
+        ID: Number(req.params.id),
       },
       data: {
-        country: req.body.country,
-        land_zone: req.body.land_zone,
-        mobile_zone: req.body.mobile_zone,
-        land_tariff: req.body.land_tariff,
-        mobile_tariff: req.body.mobile_tariff,
-        mobile: req.body.mobile,
-        landline: req.body.landline,
+        MAGCode: req.body.MAGCode,
+        MAGDestination:req.body.MAGDestination,
+        Destination: req.body.Destination,
+        Key: req.body.Key,
+        Zone: req.body.Zone,
+        RateBusinessGBP: req.body.RateBusinessGBP,
+        RateResidentialGBP: req.body.RateResidentialGBP,
+        RateEU: req.body.RateEU,
+        RateUSD: req.body.RateUSD,
       },
     });
   } catch (error) {
@@ -188,7 +214,7 @@ exports.delete = async (req, res) => {
   try {
     await prisma.zones.delete({
       where: {
-        id: Number(req.params.id),
+        ID: Number(req.params.id),
       },
     });
   } catch (error) {

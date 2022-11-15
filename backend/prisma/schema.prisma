@@ -8,12 +8,21 @@ datasource db {
 }
 
 model zones {
-  id            Int      @id @default(autoincrement())
-  country       String   @db.VarChar(255)
-  land_zone     String?  @db.VarChar(255)
-  mobile_zone   String?  @db.VarChar(255)
-  land_tariff   String?  @db.VarChar(255)
-  mobile_tariff String?  @db.VarChar(255)
-  mobile        Boolean?
-  landline      Boolean?
+  ID                 Int     @id @default(autoincrement())
+  MAGCode            String? @db.VarChar(255)
+  MAGDestination     String? @db.VarChar(255)
+  Destination        String? @db.VarChar(255)
+  Key                String? @db.VarChar(255)
+  Zone               String? @db.VarChar(255)
+  RateBusinessGBP    String? @db.VarChar(255)
+  RateResidentialGBP String? @db.VarChar(255)
+  RateEU             String? @db.VarChar(255)
+  RateUSD            String? @db.VarChar(255)
+}
+
+model users {
+  ID       Int    @id @default(autoincrement())
+  user     String @db.VarChar(100)
+  password String @db.VarChar(100)
+  role     String @db.VarChar(100)
 }
