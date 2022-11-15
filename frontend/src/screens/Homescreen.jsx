@@ -2,11 +2,10 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { Row, Col, Button, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import zones from '../zones';
 import Zone from '../components/Zone';
 import axios from 'axios';
 
-const Homescreen = () => {
+const Homescreen = ({currency}) => {
   const [landline, setLandline] = useState(null);
   const [mobile, setMobile] = useState(null);
   const [landCountries, setLandCountries] = useState(null);
@@ -15,9 +14,54 @@ const Homescreen = () => {
   const [mobTariff, setMobTariff] = useState('');
   const [selectedLand, setSelectedLand] = useState('');
   const [selectedMob, setSelectedMob] = useState('');
-  const [currency, setCurrency] = useState('GBP');
+  const [selectLand, setSelectLand] = useState('');
+  const [selectMob, setSelectMob] = useState('');
+  //const [currency, setCurrency] = useState('GBP');
   const [error, setError] = useState('');
   const [loaded, setLoaded] = useState(false);
+
+  const setSelect = (data, type, currency) => {
+    const countries = [];
+        data.forEach((value) => {
+          switch(currency) {
+            case 'GBP':
+              countries.push({
+                key: value.Destination,
+                value: value.RateBusinessGBP,
+              });
+              break;
+            case 'USD':
+              countries.push({
+                key: value.Destination,
+                value: value.RateUSD,
+              });
+              break;
+            case 'EU':
+              countries.push({
+                key: value.Destination,
+                value: value.RateEU,
+              });
+              break;
+            default:
+              countries.push({
+                key: value.Destination,
+                value: value.RateBusinessGBP,
+              });
+          }
+        });
+        if(type == 'landline'){
+          setLandCountries([
+            { key: 'Select a country', value: '' },
+            ...countries,
+          ]);
+        }else if(type == 'mobile'){
+          setMobCountries([
+            { key: 'Select a country', value: '' },
+            ...countries,
+          ]);
+        }
+        
+  }
 
   const setZones = (data, currency) => {
     const lines = [];
@@ -64,54 +108,38 @@ const Homescreen = () => {
   };
 
   const handleLandSelect = (e) => {
+    setSelectLand(e.target.value);
     setLandTariff(e.target.value);
     const selected = document.getElementById('landSelect');
     setSelectedLand(selected.options[selected.selectedIndex].text);
   };
 
   const handleMobSelect = (e) => {
+    setSelectMob(e.target.value);
     setMobTariff(e.target.value);
     const selected = document.getElementById('mobSelect');
     setSelectedMob(selected.options[selected.selectedIndex].text);
   };
-  console.log(selectedMob);
-  console.log(selectedLand);
+
 
   useEffect(() => {
     const loadZones = async () => {
       try {
-        //const countries = await axios.get('/api/findAll');
-        //setLandline(setZones(countries.data, 'landline'));
-        //setMobile(setZones(countries.data, 'mobile'));
+
         const landlines = await axios.get('/api/countries/landline');
         const mobiles = await axios.get('/api/countries/mobile');
 
         setLandline(setZones(landlines.data, currency));
         setMobile(setZones(mobiles.data, currency));
 
-        const land_countries = [];
-        landlines.data.forEach((value) => {
-          land_countries.push({
-            key: value.Destination,
-            value: value.RateBusinessGBP,
-          });
-        });
-        setLandCountries([
-          { key: 'Select a country', value: '' },
-          ...land_countries,
-        ]);
+        setSelect(landlines.data, 'landline', currency)
+        setSelect(mobiles.data, 'mobile', currency)
 
-        const mob_countries = [];
-        mobiles.data.forEach((value) => {
-          mob_countries.push({
-            key: value.Destination,
-            value: value.RateBusinessGBP,
-          });
-        });
-        setMobCountries([
-          { key: 'Select a country', value: '' },
-          ...mob_countries,
-        ]);
+        setLandTariff('');
+        setMobTariff('');
+        setSelectLand('');
+        setSelectMob('');
+
       } catch (error) {
         setError(error);
       } finally {
@@ -120,7 +148,7 @@ const Homescreen = () => {
     };
 
     loadZones();
-  }, []);
+  }, [currency]);
 
   return (
     <>
@@ -142,6 +170,7 @@ const Homescreen = () => {
               <Col>
                 <Form.Select
                   id="landSelect"
+                  value={selectLand}
                   onChange={(e) => handleLandSelect(e)}
                 >
                   {landCountries &&
@@ -168,6 +197,7 @@ const Homescreen = () => {
               <Col>
                 <Form.Select
                   id="mobSelect"
+                  value={selectMob}
                   onChange={(e) => handleMobSelect(e)}
                 >
                   {mobCountries &&
