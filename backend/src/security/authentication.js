@@ -19,17 +19,16 @@ exports.createRefreshToken = (refreshToken) => {
   );
 };
 
-exports.authenticateToken = (req, res, next) => {
+exports.authenticateAdminToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
   if (!token) return res.sendStatus(401);
 
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-    console.log(user.user.role);
     if (err) {
       return res.status(403).send(err);
-    } else if (user.user.role !== "admin") {
-      return res.status(403).send("Only admin allowed");
+    } else if (user.user.role.toUpperCase() !== "admin".toUpperCase()) {
+      return res.status(403).send("Administrators only");
     }
     req.user = user;
     next();
@@ -40,7 +39,7 @@ const generateAccessToken = (user) => {
   const authUser = { user: user };
   return jwt.sign(authUser, process.env.ACCESS_TOKEN_SECRET, {
     algorithm: "HS256",
-    expiresIn: "30m",
+    expiresIn: "1h",
   });
 };
 
@@ -48,6 +47,6 @@ const generateRefreshToken = (user) => {
   const authUser = { user: user };
   return jwt.sign(authUser, process.env.REFRESH_TOKEN_SECRET, {
     algorithm: "HS256",
-    expiresIn: "3h",
+    expiresIn: "7d",
   });
 };

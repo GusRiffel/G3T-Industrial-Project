@@ -8,6 +8,9 @@ const prisma = new PrismaClient({
 exports.signUp = async (req, res) => {
   const body = req.body;
   let newUser;
+  if (await validateUserAvailability(body.user)) {
+    return res.status(400).send({ message: "User already registered" });
+  }
   try {
     newUser = await prisma.users.create({
       data: {
@@ -24,16 +27,21 @@ exports.signUp = async (req, res) => {
 
 exports.signIn = async (req, res) => {
   const body = req.body;
-  const user = await prisma.users.findFirst({
-    where: {
-      user: body.user,
-    },
-    select: {
-      user: true,
-      password: true,
-      role: true,
-    },
-  });
+  let user;
+  try {
+    user = await prisma.users.findFirst({
+      where: {
+        user: body.user,
+      },
+      select: {
+        user: true,
+        password: true,
+        role: true,
+      },
+    });
+  } catch (error) {
+    return res.status(500).send(error);
+  }
   if (!user) {
     return res.status(400).send("Cannot find user");
   } else if (user.password !== body.password) {
@@ -48,6 +56,19 @@ exports.refreshToken = (req, res) => {
   const refreshToken = req.body.token;
   if (!refreshToken) return res.sendStatus(401);
   const newToken = auth.createRefreshToken(refreshToken);
-  console.log(newToken);
   res.json({ accessToken: newToken });
+};
+
+const validateUserAvailability = async (user) => {
+  let userFound;
+  try {
+    userFound = await prisma.users.findFirst({
+      where: {
+        user: user,
+      },
+    });
+  } catch (error) {
+    return error;
+  }
+  return userFound;
 };
