@@ -8,11 +8,15 @@ exports.createToken = (user) => {
 };
 
 exports.createRefreshToken = (refreshToken) => {
-  return jwt.verify(refreshToken, process.env.SECRET, (err, user) => {
-    console.log(user);
-    if (err) return err.message;
-    return generateAccessToken({ user: user.user });
-  });
+  return jwt.verify(
+    refreshToken,
+    process.env.REFRESH_TOKEN_SECRET,
+    (err, user) => {
+      console.log(user);
+      if (err) return err.message;
+      return generateAccessToken({ user: user.user });
+    }
+  );
 };
 
 exports.authenticateToken = (req, res, next) => {
@@ -20,8 +24,13 @@ exports.authenticateToken = (req, res, next) => {
   const token = authHeader && authHeader.split(" ")[1];
   if (!token) return res.sendStatus(401);
 
-  jwt.verify(token, process.env.SECRET, (err, user) => {
-    if (err) return res.status(403).send(err);
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    console.log(user.user.role);
+    if (err) {
+      return res.status(403).send(err);
+    } else if (user.user.role !== "admin") {
+      return res.status(403).send("Only admin allowed");
+    }
     req.user = user;
     next();
   });
@@ -29,16 +38,16 @@ exports.authenticateToken = (req, res, next) => {
 
 const generateAccessToken = (user) => {
   const authUser = { user: user };
-  return jwt.sign(authUser, process.env.SECRET, {
+  return jwt.sign(authUser, process.env.ACCESS_TOKEN_SECRET, {
     algorithm: "HS256",
-    expiresIn: "30s",
+    expiresIn: "30m",
   });
 };
 
 const generateRefreshToken = (user) => {
   const authUser = { user: user };
-  return jwt.sign(authUser, process.env.SECRET, {
+  return jwt.sign(authUser, process.env.REFRESH_TOKEN_SECRET, {
     algorithm: "HS256",
-    expiresIn: "1h",
+    expiresIn: "3h",
   });
 };

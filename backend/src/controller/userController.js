@@ -5,7 +5,24 @@ const prisma = new PrismaClient({
   log: ["query"],
 });
 
-exports.signup = async (req, res) => {
+exports.signUp = async (req, res) => {
+  const body = req.body;
+  let newUser;
+  try {
+    newUser = await prisma.users.create({
+      data: {
+        user: body.user,
+        password: body.password,
+        role: "user",
+      },
+    });
+  } catch (error) {
+    res.status(400).send({ message: error });
+  }
+  return res.status(201).json(newUser);
+};
+
+exports.signIn = async (req, res) => {
   const body = req.body;
   const user = await prisma.users.findFirst({
     where: {
@@ -14,6 +31,7 @@ exports.signup = async (req, res) => {
     select: {
       user: true,
       password: true,
+      role: true,
     },
   });
   if (!user) {
@@ -21,7 +39,7 @@ exports.signup = async (req, res) => {
   } else if (user.password !== body.password) {
     res.status(400).send("Wrong password");
   } else {
-    const token = auth.createToken(user.user);
+    const token = auth.createToken(user);
     res.status(200).json(token);
   }
 };
