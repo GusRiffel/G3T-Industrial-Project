@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 
 exports.createToken = (user) => {
   return {
+    user: user.user,
     accessToken: generateAccessToken(user),
     refreshToken: generateRefreshToken(user),
   };
@@ -12,7 +13,6 @@ exports.createRefreshToken = (refreshToken) => {
     refreshToken,
     process.env.REFRESH_TOKEN_SECRET,
     (err, user) => {
-      console.log(user);
       if (err) return err.message;
       return generateAccessToken({ user: user.user });
     }

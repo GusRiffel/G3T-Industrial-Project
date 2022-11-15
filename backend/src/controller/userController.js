@@ -47,7 +47,7 @@ exports.signIn = async (req, res) => {
   } else if (user.password !== body.password) {
     res.status(400).send("Wrong password");
   } else {
-    const token = auth.createToken(user);
+    const token = auth.createToken({ user: user.user, role: user.role });
     res.status(200).json(token);
   }
 };
