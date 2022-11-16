@@ -165,10 +165,10 @@ exports.findAvailableLinesByCountry = async (req, res) => {
 };
 
 exports.findByZone = async (req, res) => {
-  let record;
+  let records;
   let zoneparam = req.params.zone;
   try {
-    record = await prisma.zones.findMany({
+    records = await prisma.zones.findMany({
       where: {
         Zone: zoneparam,
       },
@@ -176,7 +176,10 @@ exports.findByZone = async (req, res) => {
   } catch (error) {
     res.status(400).send({ message: error });
   }
-  return res.status(200).json(record);
+  if (!records.length) {
+    return res.status(404).send({ message: "Zone not found" });
+  }
+  return res.status(200).json(records);
 };
 
 exports.findById = async (req, res) => {
@@ -188,7 +191,7 @@ exports.findById = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(400).send({ message: error });
+    res.status(404).send(error);
   }
   return res.status(201).json(record);
 };

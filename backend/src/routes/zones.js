@@ -68,8 +68,58 @@ const zonesController = require("../controller/zonesController");
  *                    
 */
 zonesRouter.get("/zones", zonesController.findAll);
-zonesRouter.get("/zones/landline", zonesController.findAllLandLineZones);
-zonesRouter.get("/zones/mobile", zonesController.findAllMobilesZones);
+
+/**
+ * @swagger
+ * /api/zones/zone/{zone}:
+ *   get:
+ *     tags: [Zones]
+ *     summary: Returns zones available by zone
+ *     parameters:
+ *       - in: path
+ *         name: zone
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The name of the zone
+ *     responses:
+ *      200:
+ *        description: A Json array of zones for the selected zone
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              items:
+ *                $ref: '#/components/schemas/Zone'
+ *      404:
+ *        description: Zone not found
+*/
+zonesRouter.get("/zones/zone/:zone", zonesController.findByZone);
+
+/**
+ * @swagger
+ * /api/zones/id/{id}:
+ *   get:
+ *     tags: [Zones]
+ *     summary: Returns zone by id
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The zone found with the id provided
+ *     responses:
+ *      200:
+ *        description: A Json with the zone for the selected id
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Zone'           
+ *      404:
+ *        description: Not found error
+*/
+zonesRouter.get("/zones/id/:id", zonesController.findById);
 
 /**
  * @swagger
@@ -101,17 +151,95 @@ zonesRouter.get(
   zonesController.findAvailableLinesByCountry
 );
 
-zonesRouter.get("/zones/:zone", zonesController.findByZone);
+/**
+ * @swagger
+ * /api/zones/landline:
+ *   get:
+ *     tags: [Zones]
+ *     summary: Returns list of all landline zones
+ *     responses:
+ *      200:
+ *        description: A Json array of all landline zones
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              items:
+ *                type: object
+ *                properties:
+ *                  Zone:
+ *                    type: string
+ *                example:
+ *                  Zone: Z1
+*/
+zonesRouter.get("/zones/landline", zonesController.findAllLandLineZones);
 
+/**
+ * @swagger
+ * /api/zones/landline/tariff:
+ *   get:
+ *     tags: [Zones]
+ *     summary: Returns list of all zones with landline lines and its tariff
+ *     responses:
+ *      200:
+ *        description: A Json array of zones with landline lines
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              items:
+ *                $ref: '#/components/schemas/Zone'
+ *                    
+*/
 zonesRouter.get(
-  "/countries/mobile",
-  zonesController.findAllCountriesByMobileTariff
-);
-zonesRouter.get(
-  "/countries/landline",
+  "/zones/landline/tariff",
   zonesController.findAllCountriesByLandLineTariff
 );
-zonesRouter.get("/countries/:id", zonesController.findById);
+
+/**
+ * @swagger
+ * /api/zones/mobile:
+ *   get:
+ *     tags: [Zones]
+ *     summary: Returns list of all mobile zones
+ *     responses:
+ *      200:
+ *        description: A Json array of all mobile zones
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              items:
+ *                type: object
+ *                properties:
+ *                  Zone:
+ *                    type: string
+ *                example:
+ *                  Zone: X
+*/
+zonesRouter.get("/zones/mobile", zonesController.findAllMobilesZones);
+
+/**
+ * @swagger
+ * /api/zones/mobile/tariff:
+ *   get:
+ *     tags: [Zones]
+ *     summary: Returns list of all zones with mobile lines and its tariff
+ *     responses:
+ *      200:
+ *        description: A Json array of zones with mobile lines
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              items:
+ *                $ref: '#/components/schemas/Zone'
+ *                    
+*/
+zonesRouter.get(
+  "/zones/mobile/tariff",
+  zonesController.findAllCountriesByMobileTariff
+);
 
 zonesRouter.post(
   "/create",

@@ -9,7 +9,7 @@ exports.signUp = async (req, res) => {
   const body = req.body;
   let newUser;
   if (await validateUserAvailability(body.user)) {
-    return res.status(400).send({ message: "User already registered" });
+    return res.status(400).send("User already registered");
   }
   try {
     newUser = await prisma.users.create({

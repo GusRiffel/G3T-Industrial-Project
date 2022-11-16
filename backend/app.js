@@ -12,7 +12,7 @@ const options = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "ZONES API Doc",
+      title: "ZONES API Docs",
       version: "1.0.0",
       description: "Find out rates for international calls in, a simple, quick, and straightforward way"
     },
