@@ -145,9 +145,14 @@ exports.findAvailableLinesByCountry = async (req, res) => {
   try {
     countries = await prisma.zones.findMany({
       where: {
-        Destination: {
-          contains: `%${req.params.country} %`,
-        },
+        OR: [
+          {
+            Destination: {
+              contains: `%${req.params.country} %`,
+            },
+          },
+          { Destination: req.params.country },
+        ],
       },
     });
   } catch (error) {
