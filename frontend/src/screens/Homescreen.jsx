@@ -2,11 +2,10 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { Row, Col, Button, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import zones from '../zones';
 import Zone from '../components/Zone';
 import axios from 'axios';
 
-const Homescreen = () => {
+const Homescreen = ({ currency }) => {
   const [landline, setLandline] = useState(null);
   const [mobile, setMobile] = useState(null);
   const [landCountries, setLandCountries] = useState(null);
@@ -18,27 +17,82 @@ const Homescreen = () => {
   const [error, setError] = useState('');
   const [loaded, setLoaded] = useState(false);
 
-  const setZones = (data, zone) => {
-    const lines = [];
-    if (zone == 'landline') {
-      data.forEach((value) => {
-        lines.push({
-          zone: value.land_zone,
-          tariff: value.land_tariff,
-        });
-      });
-    } else {
-      data.forEach((value) => {
-        lines.push({
-          zone: value.mobile_zone,
-          tariff: value.mobile_tariff,
-        });
-      });
+  const setSelect = (data, type, currency) => {
+    const countries = [];
+    data.forEach((value) => {
+      switch (currency) {
+        case 'GBP':
+          countries.push({
+            key: value.Destination,
+            value: value.RateResidentialGBP,
+          });
+          break;
+        case 'USD':
+          countries.push({
+            key: value.Destination,
+            value: value.RateUSD,
+          });
+          break;
+        case 'EU':
+          countries.push({
+            key: value.Destination,
+            value: value.RateEU,
+          });
+          break;
+        default:
+          countries.push({
+            key: value.Destination,
+            value: value.RateResidentialGBP,
+          });
+      }
+    });
+    countries.sort((a, b) =>
+      a.key > b.key ? 1 : b.key > a.key ? -1 : 0
+    );
+    if (type == 'landline') {
+      setLandCountries([{ key: 'Select a country', value: '' }, ...countries]);
+    } else if (type == 'mobile') {
+      setMobCountries([{ key: 'Select a country', value: '' }, ...countries]);
     }
+  };
+
+  const setZones = (data, currency) => {
+    const lines = [];
+
+    data.forEach((value) => {
+      if (value.Zone != '?') {
+        switch (currency) {
+          case 'GBP':
+            lines.push({
+              zone: value.Zone,
+              tariff: value.RateResidentialGBP,
+            });
+            break;
+          case 'USD':
+            lines.push({
+              zone: value.Zone,
+              tariff: value.RateUSD,
+            });
+            break;
+          case 'EU':
+            lines.push({
+              zone: value.Zone,
+              tariff: value.RateEU,
+            });
+            break;
+          default:
+            lines.push({
+              zone: value.Zone,
+              tariff: value.RateResidentialGBP,
+            });
+        }
+      }
+    });
 
     const unique_lines = [
       ...new Map(lines.map((item) => [item['zone'], item])).values(),
     ];
+
     unique_lines.sort((a, b) =>
       a.zone > b.zone ? 1 : b.zone > a.zone ? -1 : 0
     );
@@ -56,39 +110,23 @@ const Homescreen = () => {
     const selected = document.getElementById('mobSelect');
     setSelectedMob(selected.options[selected.selectedIndex].text);
   };
-  console.log(selectedMob);
-  console.log(selectedLand);
 
   useEffect(() => {
     const loadZones = async () => {
       try {
-        const countries = await axios.get('/api/findAll');
-        setLandline(setZones(countries.data, 'landline'));
-        setMobile(setZones(countries.data, 'mobile'));
+        setLandTariff('');
+        setMobTariff('');
+        setLandCountries(null);
+        setMobCountries(null);
 
-        const land_countries = [];
-        countries.data.forEach((value) => {
-          land_countries.push({
-            key: value.country,
-            value: value.land_tariff,
-          });
-        });
-        setLandCountries([
-          { key: 'Select a country', value: '' },
-          ...land_countries,
-        ]);
+        const landlines = await axios.get('/api/countries/landline');
+        const mobiles = await axios.get('/api/countries/mobile');
 
-        const mob_countries = [];
-        countries.data.forEach((value) => {
-          mob_countries.push({
-            key: value.country,
-            value: value.mobile_tariff,
-          });
-        });
-        setMobCountries([
-          { key: 'Select a country', value: '' },
-          ...mob_countries,
-        ]);
+        setLandline(setZones(landlines.data, currency));
+        setMobile(setZones(mobiles.data, currency));
+
+        setSelect(landlines.data, 'landline', currency);
+        setSelect(mobiles.data, 'mobile', currency);
       } catch (error) {
         setError(error);
       } finally {
@@ -97,7 +135,7 @@ const Homescreen = () => {
     };
 
     loadZones();
-  }, []);
+  }, [currency]);
 
   return (
     <>
@@ -134,7 +172,13 @@ const Homescreen = () => {
               </Col>
             </Row>
             <Row className="mt-3">
-              <Col>{landTariff && <h5>£ {landTariff} pence p/min</h5>}</Col>
+              <Col>
+                {landTariff && (
+                  <h5>
+                     {landTariff} {currency} p/min
+                  </h5>
+                )}
+              </Col>
             </Row>
           </Col>
           <Col>
@@ -160,7 +204,13 @@ const Homescreen = () => {
               </Col>
             </Row>
             <Row className="mt-3">
-              <Col>{mobTariff && <h5>£ {mobTariff} pence p/min</h5>}</Col>
+              <Col>
+                {mobTariff && (
+                  <h5>
+                     {mobTariff} {currency} p/min
+                  </h5>
+                )}
+              </Col>
             </Row>
           </Col>
         </Row>
@@ -176,7 +226,7 @@ const Homescreen = () => {
               {landline &&
                 landline.map((zone, i) => (
                   <Col key={i} className="col-sm-4">
-                    <Zone zone={zone} />
+                    <Zone zone={zone} curr={currency} />
                   </Col>
                 ))}
             </Row>
@@ -188,7 +238,7 @@ const Homescreen = () => {
               {mobile &&
                 mobile.map((zone, i) => (
                   <Col key={i} className="col-sm-4">
-                    <Zone zone={zone} />
+                    <Zone zone={zone} curr={currency} />
                   </Col>
                 ))}
             </Row>

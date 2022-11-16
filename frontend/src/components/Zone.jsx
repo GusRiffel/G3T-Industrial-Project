@@ -2,7 +2,7 @@ import React from 'react';
 import { Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-const Zone = ({ zone }) => {
+const Zone = ({ zone, curr }) => {
   return (
     <Card className="my-3 p-3 rounded">
       <Card.Body>
@@ -15,7 +15,7 @@ const Zone = ({ zone }) => {
         }
 
         <Card.Text as="h6">
-          £{zone.tariff} pence
+          {parseFloat(zone.tariff) <= 0.18 ? zone.tariff : 'Over 0.18'} {curr} {' '}
           p/min
         </Card.Text>
       </Card.Body>
