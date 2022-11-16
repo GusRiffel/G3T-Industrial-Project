@@ -13,7 +13,7 @@ exports.createRefreshToken = (refreshToken) => {
     refreshToken,
     process.env.REFRESH_TOKEN_SECRET,
     (err, user) => {
-      if (err) return err.message;
+      if (err) return {error: err.message};
       return generateAccessToken({ user: user.user });
     }
   );

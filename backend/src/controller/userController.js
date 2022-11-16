@@ -1,16 +1,18 @@
 const { PrismaClient } = require("@prisma/client");
 const auth = require("../security/jwt");
 
-const prisma = new PrismaClient({
-  log: ["query"],
-});
+const prisma = new PrismaClient();
 
 exports.signUp = async (req, res) => {
   const body = req.body;
   let newUser;
-  if (await validateUserAvailability(body.user)) {
+
+  if (!validateBody(body)) {
+    return res.status(400).send("Please fill in all required fields");
+  } else if (await validateUserAvailability(body.user)) {
     return res.status(400).send("User already registered");
   }
+
   try {
     newUser = await prisma.users.create({
       data: {
@@ -28,6 +30,9 @@ exports.signUp = async (req, res) => {
 exports.signIn = async (req, res) => {
   const body = req.body;
   let user;
+  if (!validateBody(body)) {
+    return res.status(400).send("Please fill in all required fields");
+  }
   try {
     user = await prisma.users.findFirst({
       where: {
@@ -43,7 +48,7 @@ exports.signIn = async (req, res) => {
     return res.status(500).send(error);
   }
   if (!user) {
-    return res.status(400).send("Cannot find user");
+    return res.status(400).send("User not found");
   } else if (user.password !== body.password) {
     res.status(400).send("Wrong password");
   } else {
@@ -53,10 +58,13 @@ exports.signIn = async (req, res) => {
 };
 
 exports.refreshToken = (req, res) => {
-  const refreshToken = req.body.token;
-  if (!refreshToken) return res.sendStatus(401);
+  const refreshToken = req.body.refreshToken;
+  if (!refreshToken) return res.sendStatus(400);
   const newToken = auth.createRefreshToken(refreshToken);
-  res.json({ accessToken: newToken });
+  if (newToken.error) {
+    res.status(400).json(newToken);
+  }
+  res.status(201).json({ accessToken: newToken });
 };
 
 const validateUserAvailability = async (user) => {
@@ -71,4 +79,11 @@ const validateUserAvailability = async (user) => {
     return error;
   }
   return userFound;
+};
+
+const validateBody = (body) => {
+  if (Object.values(body).length !== 2) {
+    return false;
+  }
+  return Object.values(body).every((field) => field !== null && field !== "");
 };

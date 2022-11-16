@@ -41,6 +41,36 @@ const zonesController = require("../controller/zonesController");
  *        RateResidentialGBP: "0.20"
  *        RateEU: "0.30"
  *        RateUSD: "0.36"
+ *    ZoneBody:
+ *      type: object
+ *      properties:
+ *        MAGCode:
+ *          type: string
+ *          default: 2
+ *        MAGDestination:
+ *          type: string
+ *          default: testDestination
+ *        Destination:
+ *          type: string
+ *          default: testDestination
+ *        Key:
+ *          type: string
+ *          default: 1
+ *        Zone:
+ *          type: string
+ *          default: Z3
+ *        RateBusinessGBP:
+ *          type: string
+ *          default: 0.2
+ *        RateResidentialGBP:
+ *          type: string
+ *          default: 0.2
+ *        RateEU:
+ *          type: string
+ *          default: 0.3
+ *        RateUSD:
+ *          type: string
+ *          default: 0.4
  */
 
 /**
@@ -108,7 +138,7 @@ zonesRouter.get("/zones/zone/:zone", zonesController.findByZone);
  *         schema:
  *           type: string
  *         required: true
- *         description: The zone found with the id provided
+ *         description: The id for the desired zone
  *     responses:
  *      200:
  *        description: A Json with the zone for the selected id
@@ -241,20 +271,102 @@ zonesRouter.get(
   zonesController.findAllCountriesByMobileTariff
 );
 
+/**
+ * @swagger
+ * /api/zones/create:
+ *   post:
+ *     tags: [Zones]
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Creates new zone
+ *     requestBody:
+ *       required: true
+ *       content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/components/schemas/ZoneBody'
+ *     responses:
+ *       201:
+ *         description: Created, zone successfully created
+ *         content:
+ *           application/json:
+ *             schema:
+ *              $ref: '#components/schemas/Zone'
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden, check response body
+ */
 zonesRouter.post(
-  "/create",
+  "/zones/create",
   auth.authenticateAdminToken,
   zonesController.create
 );
 
+/**
+ * @swagger
+ * /api/zones/update/{id}:
+ *   put:
+ *     tags: [Zones]
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Updates zone
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The id of the desired zone
+ *     requestBody:
+ *       required: true
+ *       content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/components/schemas/ZoneBody'
+ *     responses:
+ *       200:
+ *         description: Success, zone successfully updated
+ *         content:
+ *           application/json:
+ *             schema:
+ *              $ref: '#components/schemas/Zone'
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden, check response body
+ */
 zonesRouter.put(
-  "/countries/update/:id",
+  "/zones/update/:id",
   auth.authenticateAdminToken,
   zonesController.update
 );
 
+/**
+ * @swagger
+ * /api/zones/delete/{id}:
+ *   delete:
+ *     tags: [Zones]
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Deletes zone
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The id of the desired zone
+ *     responses:
+ *       204:
+ *         description: No Content success, zone successfully deleted
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden, check response body
+ */
 zonesRouter.delete(
-  "/countries/delete/:id",
+  "/zones/delete/:id",
   auth.authenticateAdminToken,
   zonesController.delete
 );

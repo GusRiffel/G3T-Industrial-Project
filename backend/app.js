@@ -14,14 +14,24 @@ const options = {
     info: {
       title: "ZONES API Docs",
       version: "1.0.0",
-      description: "Find out rates for international calls in, a simple, quick, and straightforward way"
+      description:
+        "Find out rates for international calls in, a simple, quick, and straightforward way",
+    },
+    servers: [
+      {
+        url: "http://localhost:3000",
+      },
+    ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
     },
   },
-  servers: [
-    {
-      url: "http://localhost:3000",
-    },
-  ],
   apis: ["./src/routes/*.js"],
 };
 
