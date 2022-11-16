@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import Zone from '../components/Zone';
 import axios from 'axios';
 
-const Homescreen = ({currency}) => {
+const Homescreen = ({ currency }) => {
   const [landline, setLandline] = useState(null);
   const [mobile, setMobile] = useState(null);
   const [landCountries, setLandCountries] = useState(null);
@@ -19,53 +19,49 @@ const Homescreen = ({currency}) => {
 
   const setSelect = (data, type, currency) => {
     const countries = [];
-        data.forEach((value) => {
-          switch(currency) {
-            case 'GBP':
-              countries.push({
-                key: value.Destination,
-                value: value.RateResidentialGBP,
-              });
-              break;
-            case 'USD':
-              countries.push({
-                key: value.Destination,
-                value: value.RateUSD,
-              });
-              break;
-            case 'EU':
-              countries.push({
-                key: value.Destination,
-                value: value.RateEU,
-              });
-              break;
-            default:
-              countries.push({
-                key: value.Destination,
-                value: value.RateResidentialGBP,
-              });
-          }
-        });
-        if(type == 'landline'){
-          setLandCountries([
-            { key: 'Select a country', value: '' },
-            ...countries,
-          ]);
-        }else if(type == 'mobile'){
-          setMobCountries([
-            { key: 'Select a country', value: '' },
-            ...countries,
-          ]);
-        }
-        
-  }
+    data.forEach((value) => {
+      switch (currency) {
+        case 'GBP':
+          countries.push({
+            key: value.Destination,
+            value: value.RateResidentialGBP,
+          });
+          break;
+        case 'USD':
+          countries.push({
+            key: value.Destination,
+            value: value.RateUSD,
+          });
+          break;
+        case 'EU':
+          countries.push({
+            key: value.Destination,
+            value: value.RateEU,
+          });
+          break;
+        default:
+          countries.push({
+            key: value.Destination,
+            value: value.RateResidentialGBP,
+          });
+      }
+    });
+    countries.sort((a, b) =>
+      a.key > b.key ? 1 : b.key > a.key ? -1 : 0
+    );
+    if (type == 'landline') {
+      setLandCountries([{ key: 'Select a country', value: '' }, ...countries]);
+    } else if (type == 'mobile') {
+      setMobCountries([{ key: 'Select a country', value: '' }, ...countries]);
+    }
+  };
 
   const setZones = (data, currency) => {
     const lines = [];
 
     data.forEach((value) => {
-      if(value.Zone != '?'){
-        switch(currency) {
+      if (value.Zone != '?') {
+        switch (currency) {
           case 'GBP':
             lines.push({
               zone: value.Zone,
@@ -91,7 +87,6 @@ const Homescreen = ({currency}) => {
             });
         }
       }
-      
     });
 
     const unique_lines = [
@@ -116,11 +111,9 @@ const Homescreen = ({currency}) => {
     setSelectedMob(selected.options[selected.selectedIndex].text);
   };
 
-
   useEffect(() => {
     const loadZones = async () => {
       try {
-
         setLandTariff('');
         setMobTariff('');
         setLandCountries(null);
@@ -132,10 +125,8 @@ const Homescreen = ({currency}) => {
         setLandline(setZones(landlines.data, currency));
         setMobile(setZones(mobiles.data, currency));
 
-        setSelect(landlines.data, 'landline', currency)
-        setSelect(mobiles.data, 'mobile', currency)
-
-
+        setSelect(landlines.data, 'landline', currency);
+        setSelect(mobiles.data, 'mobile', currency);
       } catch (error) {
         setError(error);
       } finally {
@@ -181,7 +172,13 @@ const Homescreen = ({currency}) => {
               </Col>
             </Row>
             <Row className="mt-3">
-              <Col>{landTariff && <h5>£ {landTariff} {currency} p/min</h5>}</Col>
+              <Col>
+                {landTariff && (
+                  <h5>
+                     {landTariff} {currency} p/min
+                  </h5>
+                )}
+              </Col>
             </Row>
           </Col>
           <Col>
@@ -207,7 +204,13 @@ const Homescreen = ({currency}) => {
               </Col>
             </Row>
             <Row className="mt-3">
-              <Col>{mobTariff && <h5>£ {mobTariff} {currency} p/min</h5>}</Col>
+              <Col>
+                {mobTariff && (
+                  <h5>
+                     {mobTariff} {currency} p/min
+                  </h5>
+                )}
+              </Col>
             </Row>
           </Col>
         </Row>
@@ -223,7 +226,7 @@ const Homescreen = ({currency}) => {
               {landline &&
                 landline.map((zone, i) => (
                   <Col key={i} className="col-sm-4">
-                    <Zone zone={zone} curr={currency}/>
+                    <Zone zone={zone} curr={currency} />
                   </Col>
                 ))}
             </Row>
@@ -235,7 +238,7 @@ const Homescreen = ({currency}) => {
               {mobile &&
                 mobile.map((zone, i) => (
                   <Col key={i} className="col-sm-4">
-                    <Zone zone={zone} curr={currency}/>
+                    <Zone zone={zone} curr={currency} />
                   </Col>
                 ))}
             </Row>

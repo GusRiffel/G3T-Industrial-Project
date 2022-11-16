@@ -32,7 +32,7 @@ const ZoneScreen = ({ currency }) => {
 
     loadCountries();
   }, []);
-  countries && console.log(countries);
+
 
   return (
     <>

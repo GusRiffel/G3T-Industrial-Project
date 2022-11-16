@@ -4,19 +4,27 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Table, Row, Col } from 'react-bootstrap';
 
-const CountryScreen = () => {
-  const [country, setCountry] = useState(null);
+const CountryScreen = ({currency}) => {
+  const [countries, setCountries] = useState(null);
   const [error, setError] = useState('');
   const [loaded, setLoaded] = useState(false);
 
   const params = useParams();
 
+  // let filteredCountries = [];
+
+  // if(countries){
+  //   filteredCountries = countries.filter((country)=>{
+  //     return country.Destination.includes('Mobile') == false
+  //   })
+  // }
+  
   useEffect(() => {
     const loadCountries = async () => {
       try {
-        const country = await axios.get(`/api/zones/country/${params.id}`);
+        const countries = await axios.get(`/api/zones/country/${params.id}`);
 
-        setCountry(country.data[0]);
+        setCountries(countries.data);
       } catch (error) {
         setError(error);
       } finally {
@@ -26,7 +34,6 @@ const CountryScreen = () => {
 
     loadCountries();
   }, []);
-  country && console.log(country);
 
   return (
     <>
@@ -34,19 +41,36 @@ const CountryScreen = () => {
       <Table striped bordered hover responsive className="table-sm">
         <thead>
           <tr>
-            <th>Land zone</th>
-            <th>Land tariff</th>
-            <th>Mobile zone</th>
-            <th>Mobile tariff</th>
+            <th>Country</th>
+            <th>Zone</th>
+            <th>Tariff</th>
           </tr>
         </thead>
         <tbody>
-              <tr>
-                <td>{country && country.land_zone}</td>
-                <td>{country && country.land_tariff}</td>
-                <td>{country && country.mobile_zone}</td>
-                <td>{country && country.mobile_tariff}</td>
-              </tr>
+          <tr>
+            <td>{countries && countries[0].Destination}</td>
+            <td>{countries && countries[0].Zone}</td>
+            <td>{currency == 'GBP'
+                    ? countries && countries[0].RateResidentialGBP
+                    : currency == 'USD'
+                    ? countries && countries[0].RateUSD
+                    : countries && countries[0].RateEU}{' '}
+                  {currency == 'GBP' ? 'pence' : 'cents'}</td>
+          </tr>
+          {/* {countries && filteredCountries.map((country, i)=>(
+            <tr>
+              <td>{country.Destination}</td>
+              <td>{country.Zone}</td>
+              <td>
+                  {currency == 'GBP'
+                    ? country.RateResidentialGBP
+                    : currency == 'USD'
+                    ? country.RateUSD
+                    : country.RateEU}{' '}
+                  {currency == 'GBP' ? 'pence' : 'cents'}
+                </td>
+            </tr>
+          ))} */}
         </tbody>
       </Table>
     </>
