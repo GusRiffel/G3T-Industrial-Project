@@ -14,9 +14,6 @@ const Homescreen = ({currency}) => {
   const [mobTariff, setMobTariff] = useState('');
   const [selectedLand, setSelectedLand] = useState('');
   const [selectedMob, setSelectedMob] = useState('');
-  const [selectLand, setSelectLand] = useState('');
-  const [selectMob, setSelectMob] = useState('');
-  //const [currency, setCurrency] = useState('GBP');
   const [error, setError] = useState('');
   const [loaded, setLoaded] = useState(false);
 
@@ -27,7 +24,7 @@ const Homescreen = ({currency}) => {
             case 'GBP':
               countries.push({
                 key: value.Destination,
-                value: value.RateBusinessGBP,
+                value: value.RateResidentialGBP,
               });
               break;
             case 'USD':
@@ -45,7 +42,7 @@ const Homescreen = ({currency}) => {
             default:
               countries.push({
                 key: value.Destination,
-                value: value.RateBusinessGBP,
+                value: value.RateResidentialGBP,
               });
           }
         });
@@ -72,7 +69,7 @@ const Homescreen = ({currency}) => {
           case 'GBP':
             lines.push({
               zone: value.Zone,
-              tariff: value.RateBusinessGBP,
+              tariff: value.RateResidentialGBP,
             });
             break;
           case 'USD':
@@ -90,7 +87,7 @@ const Homescreen = ({currency}) => {
           default:
             lines.push({
               zone: value.Zone,
-              tariff: value.RateBusinessGBP,
+              tariff: value.RateResidentialGBP,
             });
         }
       }
@@ -108,14 +105,12 @@ const Homescreen = ({currency}) => {
   };
 
   const handleLandSelect = (e) => {
-    setSelectLand(e.target.value);
     setLandTariff(e.target.value);
     const selected = document.getElementById('landSelect');
     setSelectedLand(selected.options[selected.selectedIndex].text);
   };
 
   const handleMobSelect = (e) => {
-    setSelectMob(e.target.value);
     setMobTariff(e.target.value);
     const selected = document.getElementById('mobSelect');
     setSelectedMob(selected.options[selected.selectedIndex].text);
@@ -126,6 +121,11 @@ const Homescreen = ({currency}) => {
     const loadZones = async () => {
       try {
 
+        setLandTariff('');
+        setMobTariff('');
+        setLandCountries(null);
+        setMobCountries(null);
+
         const landlines = await axios.get('/api/countries/landline');
         const mobiles = await axios.get('/api/countries/mobile');
 
@@ -135,10 +135,6 @@ const Homescreen = ({currency}) => {
         setSelect(landlines.data, 'landline', currency)
         setSelect(mobiles.data, 'mobile', currency)
 
-        setLandTariff('');
-        setMobTariff('');
-        setSelectLand('');
-        setSelectMob('');
 
       } catch (error) {
         setError(error);
@@ -170,7 +166,6 @@ const Homescreen = ({currency}) => {
               <Col>
                 <Form.Select
                   id="landSelect"
-                  value={selectLand}
                   onChange={(e) => handleLandSelect(e)}
                 >
                   {landCountries &&
@@ -197,7 +192,6 @@ const Homescreen = ({currency}) => {
               <Col>
                 <Form.Select
                   id="mobSelect"
-                  value={selectMob}
                   onChange={(e) => handleMobSelect(e)}
                 >
                   {mobCountries &&

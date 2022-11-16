@@ -19,7 +19,7 @@ function App() {
         <Container>
           <Routes>
             <Route path='/' element={<HomeScreen currency={currency}/>} />
-            <Route path='/zones/:id' element={<ZoneScreen />} />
+            <Route path='/zones/:id' element={<ZoneScreen currency={currency}/>} />
             <Route path='/countries/:id' element={<CountryScreen />} />
           </Routes>
         </Container>
