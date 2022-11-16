@@ -3,9 +3,17 @@ import { useState } from 'react'
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap';
 
-const Header = () => {
+const Header = ({setValue}) => {
 
   const {userInfo, setUserInfo} = useState();
+  //const [currency, setCurrency] = useState('GBP');
+  const logoutHandler = () =>{
+
+  }
+
+  const handleSelect = (key) =>{
+    setValue(key)
+  }
 
   return (
     <header>
@@ -16,12 +24,20 @@ const Header = () => {
           </LinkContainer>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="ms-auto">
-              {userInfo ? (
+            <Nav className="ms-auto" onSelect={handleSelect}>
+               <NavDropdown title='Currency' id='currency'>
+                  <NavDropdown.Item eventKey="GBP">
+                    GBP
+                  </NavDropdown.Item>
+                  <NavDropdown.Item eventKey="USD">
+                    USD
+                  </NavDropdown.Item>
+                  <NavDropdown.Item eventKey="EU">
+                    EU
+                  </NavDropdown.Item>
+                </NavDropdown>
+                {userInfo ? (
                 <NavDropdown title={userInfo.name} id='username'>
-                  <LinkContainer to='/profile'>
-                    <NavDropdown.Item>Profile</NavDropdown.Item>
-                  </LinkContainer>
                   <NavDropdown.Item onClick={logoutHandler}>
                     Logout
                   </NavDropdown.Item>
@@ -32,16 +48,6 @@ const Header = () => {
                     <i className='fas fa-user'></i> Admin Login
                   </Nav.Link>
                 </LinkContainer>
-              )}
-              {userInfo && userInfo.isAdmin && (
-                <NavDropdown title='Admin' id='adminmenu'>
-                  <LinkContainer to='/admin/userlist'>
-                    <NavDropdown.Item>Users</NavDropdown.Item>
-                  </LinkContainer>
-                  <LinkContainer to='/admin/booklist'>
-                    <NavDropdown.Item>Zones</NavDropdown.Item>
-                  </LinkContainer>
-                </NavDropdown>
               )}
             </Nav>
           </Navbar.Collapse>
