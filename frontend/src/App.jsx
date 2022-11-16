@@ -7,6 +7,8 @@ import Footer from './components/Footer';
 import HomeScreen from './screens/HomeScreen';
 import ZoneScreen from './screens/ZoneScreen';
 import CountryScreen from './screens/CountryScreen';
+import LoginScreen from './screens/LoginScreen';
+import { AuthContext } from "./context/AuthContext";
 
 
 function App() {
@@ -14,6 +16,7 @@ function App() {
 
   return (
     <Router>
+      <AuthContext>
       <Header setValue={setCurrency}/>
       <main className="py-3">
         <Container>
@@ -21,10 +24,12 @@ function App() {
             <Route path='/' element={<HomeScreen currency={currency}/>} />
             <Route path='/zones/:id' element={<ZoneScreen currency={currency}/>} />
             <Route path='/countries/:id' element={<CountryScreen currency={currency}/>} />
+            <Route path='/login' element={<LoginScreen />} />
           </Routes>
         </Container>
       </main>
       <Footer />
+      </AuthContext>
     </Router>
   )
 }

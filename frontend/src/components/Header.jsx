@@ -1,18 +1,21 @@
 import React from 'react'
-import { useState } from 'react'
+import { useContext } from 'react'
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap';
+import { UserContext } from '../context/AuthContext';
+import { removeCookie } from '../utils/cookiesUtils';
 
 const Header = ({setValue}) => {
 
-  const {userInfo, setUserInfo} = useState();
-  //const [currency, setCurrency] = useState('GBP');
-  const logoutHandler = () =>{
-
-  }
+  const { currentUser, deleteCurrentUser  } = useContext(UserContext);
 
   const handleSelect = (key) =>{
     setValue(key)
+  }
+
+  const logoutHandler = () =>{
+    removeCookie();
+    deleteCurrentUser();
   }
 
   return (
@@ -25,19 +28,8 @@ const Header = ({setValue}) => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto" onSelect={handleSelect}>
-               <NavDropdown title='Currency' id='currency'>
-                  <NavDropdown.Item eventKey="GBP">
-                    GBP
-                  </NavDropdown.Item>
-                  <NavDropdown.Item eventKey="USD">
-                    USD
-                  </NavDropdown.Item>
-                  <NavDropdown.Item eventKey="EU">
-                    EU
-                  </NavDropdown.Item>
-                </NavDropdown>
-                {userInfo ? (
-                <NavDropdown title={userInfo.name} id='username'>
+                {currentUser ? (
+                <NavDropdown title={currentUser} id='username'>
                   <NavDropdown.Item onClick={logoutHandler}>
                     Logout
                   </NavDropdown.Item>
@@ -49,6 +41,17 @@ const Header = ({setValue}) => {
                   </Nav.Link>
                 </LinkContainer>
               )}
+              <NavDropdown title='Currency' id='currency'>
+                  <NavDropdown.Item eventKey="GBP">
+                    GBP
+                  </NavDropdown.Item>
+                  <NavDropdown.Item eventKey="USD">
+                    USD
+                  </NavDropdown.Item>
+                  <NavDropdown.Item eventKey="EU">
+                    EU
+                  </NavDropdown.Item>
+                </NavDropdown>
             </Nav>
           </Navbar.Collapse>
         </Container>
