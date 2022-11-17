@@ -1,5 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
 const auth = require("../security/jwt");
+const logger = require("../utils/logger");
 
 const prisma = new PrismaClient();
 
@@ -8,8 +9,10 @@ exports.signUp = async (req, res) => {
   let newUser;
 
   if (!validateBody(body)) {
+    logger.warn("Please fill in all required fields");
     return res.status(400).send("Please fill in all required fields");
   } else if (await validateUserAvailability(body.user)) {
+    logger.warn("User already registered");
     return res.status(400).send("User already registered");
   }
 
@@ -22,6 +25,7 @@ exports.signUp = async (req, res) => {
       },
     });
   } catch (error) {
+    logger.warn(error);
     res.status(400).send({ message: error });
   }
   return res.status(201).json(newUser);
@@ -31,6 +35,7 @@ exports.signIn = async (req, res) => {
   const body = req.body;
   let user;
   if (!validateBody(body)) {
+    logger.warn("Please fill in all required fields");
     return res.status(400).send("Please fill in all required fields");
   }
   try {
@@ -45,11 +50,14 @@ exports.signIn = async (req, res) => {
       },
     });
   } catch (error) {
+    logger.warn(error);
     return res.status(500).send(error);
   }
   if (!user) {
+    logger.warn("User not found");
     return res.status(400).send("User not found");
   } else if (user.password !== body.password) {
+    logger.warn("Wrong password");
     res.status(400).send("Wrong password");
   } else {
     const token = auth.createToken({ user: user.user, role: user.role });
@@ -59,9 +67,13 @@ exports.signIn = async (req, res) => {
 
 exports.refreshToken = (req, res) => {
   const refreshToken = req.body.refreshToken;
-  if (!refreshToken) return res.sendStatus(400);
+  if (!refreshToken) {
+    logger.warn("Invalid refresh Token")
+    return res.sendStatus(400);
+  }
   const newToken = auth.createRefreshToken(refreshToken);
   if (newToken.error) {
+    logger.warn(newToken);
     res.status(400).json(newToken);
   }
   res.status(201).json({ accessToken: newToken });

@@ -2,11 +2,13 @@ const express = require("express");
 const cors = require("cors");
 const swaggerJSDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
+const expressWinston = require("express-winston");
 const app = express();
 const port = 3000;
 
 const zonesRouter = require("./src/routes/zones");
 const userRouter = require("./src/routes/user");
+const logger = require("./src/utils/logger");
 
 const options = {
   definition: {
@@ -40,6 +42,12 @@ const swaggerSpec = swaggerJSDoc(options);
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(
+  expressWinston.logger({
+    winstonInstance: logger,
+    statusLevels: true,
+  })
+);
 
 app.use("/api", zonesRouter);
 app.use("/api/user", userRouter);

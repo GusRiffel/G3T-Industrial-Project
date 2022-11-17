@@ -1,4 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
+const logger = require("../utils/logger");
 
 const prisma = new PrismaClient();
 
@@ -19,6 +20,7 @@ exports.create = async (req, res) => {
       },
     });
   } catch (error) {
+    logger.warn(error);
     res.status(400).send({ message: error });
   }
 
@@ -30,6 +32,7 @@ exports.findAll = async (req, res) => {
   try {
     countries = await prisma.zones.findMany();
   } catch (error) {
+    logger.warn(error);
     res.status(404).send({ message: error });
   }
   return res.status(200).json(countries);
@@ -56,6 +59,7 @@ exports.findAllCountriesByMobileTariff = async (req, res) => {
       },
     });
   } catch (error) {
+    logger.warn(error);
     res.status(404).send({ message: error });
   }
   return res.status(200).json(countries);
@@ -80,6 +84,7 @@ exports.findAllCountriesByLandLineTariff = async (req, res) => {
       },
     });
   } catch (error) {
+    logger.warn(error);
     res.status(404).send({ message: error });
   }
   return res.status(200).json(countries);
@@ -105,6 +110,7 @@ exports.findAllLandLineZones = async (req, res) => {
       },
     });
   } catch (error) {
+    logger.warn(error);
     res.status(404).send({ message: error });
   }
   return res.status(200).json(zones);
@@ -132,6 +138,7 @@ exports.findAllMobilesZones = async (req, res) => {
       },
     });
   } catch (error) {
+    logger.warn(error);
     res.status(404).send({ message: error });
   }
   return res.status(200).json(zones);
@@ -154,9 +161,11 @@ exports.findAvailableLinesByCountry = async (req, res) => {
       },
     });
   } catch (error) {
+    logger.warn(error);
     res.status(404).send({ message: error });
   }
   if (!countries.length) {
+    logger.warn("Country not found");
     return res.status(404).send({ message: "Country not found" });
   }
   return res.status(200).json(countries);
@@ -189,6 +198,7 @@ exports.findById = async (req, res) => {
       },
     });
   } catch (error) {
+    logger.warn(error);
     res.status(404).send(error);
   }
   return res.status(201).json(record);
@@ -214,6 +224,7 @@ exports.update = async (req, res) => {
       },
     });
   } catch (error) {
+    logger.warn(error);
     res.status(400).send({ message: error });
   }
   return res.status(200).json(updatedRecord);
@@ -227,6 +238,7 @@ exports.delete = async (req, res) => {
       },
     });
   } catch (error) {
+    logger.warn(error);
     res.status(400).send({ message: error });
   }
   res.status(204).send();

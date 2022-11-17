@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const logger = require("../utils/logger");
 
 exports.createToken = (user) => {
   return {
@@ -13,7 +14,7 @@ exports.createRefreshToken = (refreshToken) => {
     refreshToken,
     process.env.REFRESH_TOKEN_SECRET,
     (err, user) => {
-      if (err) return {error: err.message};
+      if (err) return { error: err.message };
       return generateAccessToken({ user: user.user });
     }
   );
@@ -22,12 +23,17 @@ exports.createRefreshToken = (refreshToken) => {
 exports.authenticateAdminToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
-  if (!token) return res.sendStatus(401);
+  if (!token) {
+    logger.warn("Unauthorized, missing auth token");
+    return res.sendStatus(401);
+  }
 
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
     if (err) {
+      logger.warn(err);
       return res.status(403).send(err);
     } else if (user.user.role.toUpperCase() !== "admin".toUpperCase()) {
+      logger.warn("Administrators only");
       return res.status(403).send("Administrators only");
     }
     req.user = user;
