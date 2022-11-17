@@ -178,7 +178,7 @@ zonesRouter.get("/zones/id/:id", zonesController.findById);
 */
 zonesRouter.get(
   "/zones/country/:country",
-  zonesController.findAvailableLinesByCountry
+  zonesController.findAvailableLinesByZone
 );
 
 /**
@@ -223,7 +223,7 @@ zonesRouter.get("/zones/landline", zonesController.findAllLandLineZones);
 */
 zonesRouter.get(
   "/zones/landline/tariff",
-  zonesController.findAllCountriesByLandLineTariff
+  zonesController.findAllZonesForLandLineTariff
 );
 
 /**
@@ -247,7 +247,7 @@ zonesRouter.get(
  *                example:
  *                  Zone: X
 */
-zonesRouter.get("/zones/mobile", zonesController.findAllMobilesZones);
+zonesRouter.get("/zones/mobile", zonesController.findAllMobileZones);
 
 /**
  * @swagger
@@ -268,7 +268,7 @@ zonesRouter.get("/zones/mobile", zonesController.findAllMobilesZones);
 */
 zonesRouter.get(
   "/zones/mobile/tariff",
-  zonesController.findAllCountriesByMobileTariff
+  zonesController.findAllZonesForMobileTariff
 );
 
 /**

@@ -38,7 +38,7 @@ exports.findAll = async (req, res) => {
   return res.status(200).json(countries);
 };
 
-exports.findAllCountriesByMobileTariff = async (req, res) => {
+exports.findAllZonesForMobileTariff = async (req, res) => {
   let countries;
 
   try {
@@ -65,7 +65,7 @@ exports.findAllCountriesByMobileTariff = async (req, res) => {
   return res.status(200).json(countries);
 };
 
-exports.findAllCountriesByLandLineTariff = async (req, res) => {
+exports.findAllZonesForLandLineTariff = async (req, res) => {
   let countries;
 
   try {
@@ -116,7 +116,7 @@ exports.findAllLandLineZones = async (req, res) => {
   return res.status(200).json(zones);
 };
 
-exports.findAllMobilesZones = async (req, res) => {
+exports.findAllMobileZones = async (req, res) => {
   let zones;
 
   try {
@@ -144,7 +144,7 @@ exports.findAllMobilesZones = async (req, res) => {
   return res.status(200).json(zones);
 };
 
-exports.findAvailableLinesByCountry = async (req, res) => {
+exports.findAvailableLinesByZone = async (req, res) => {
   let countries;
 
   try {
@@ -225,7 +225,7 @@ exports.update = async (req, res) => {
     });
   } catch (error) {
     logger.warn(error);
-    res.status(400).send({ message: error });
+    res.status(400).send(error);
   }
   return res.status(200).json(updatedRecord);
 };

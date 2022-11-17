@@ -65,7 +65,7 @@ exports.signIn = async (req, res) => {
   }
 };
 
-exports.refreshToken = (req, res) => {
+exports.refreshAccessToken = (req, res) => {
   const refreshToken = req.body.refreshToken;
   if (!refreshToken) {
     logger.warn("Invalid refresh Token")

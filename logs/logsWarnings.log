@@ -1,0 +1,90 @@
+{
+  name: 'JsonWebTokenError',
+  message: 'invalid token',
+  level: 'warn',
+  timestamp: '2022-11-17T14:27:27.087Z'
+}
+{
+  meta: {
+    req: {
+      url: '/api/zones/create',
+      headers: {
+        host: 'localhost:3000',
+        'user-agent': 'insomnia/2022.6.0',
+        'content-type': 'application/json',
+        authorization: 'Bearer eyJhbGciOJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXIiOiJhZG1pbiIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Njg1NDM1MjcsImV4cCI6MTY2ODU0NzEyN30.rxyZHt4Ono7kM08RGGbixlqxj0WUr35M0zRGJIXh5e8',
+        accept: '*/*',
+        'content-length': '192'
+      },
+      method: 'POST',
+      httpVersion: '1.1',
+      originalUrl: '/api/zones/create',
+      query: {}
+    },
+    res: { statusCode: 403 },
+    responseTime: 8
+  },
+  level: 'warn',
+  message: 'HTTP POST /api/zones/create',
+  timestamp: '2022-11-17T14:27:27.098Z'
+}
+{
+  name: 'JsonWebTokenError',
+  message: 'invalid token',
+  level: 'warn',
+  timestamp: '2022-11-17T14:28:07.629Z'
+}
+{
+  meta: {
+    req: {
+      url: '/api/zones/create',
+      headers: {
+        host: 'localhost:3000',
+        'user-agent': 'insomnia/2022.6.0',
+        'content-type': 'application/json',
+        authorization: 'Bearer eyJhbGciOJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXIiOiJhZG1pbiIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Njg1NDM1MjcsImV4cCI6MTY2ODU0NzEyN30.rxyZHt4Ono7kM08RGGbixlqxj0WUr35M0zRGJIXh5e8',
+        accept: '*/*',
+        'content-length': '192'
+      },
+      method: 'POST',
+      httpVersion: '1.1',
+      originalUrl: '/api/zones/create',
+      query: {}
+    },
+    res: { statusCode: 403 },
+    responseTime: 7
+  },
+  level: 'warn',
+  message: 'HTTP POST /api/zones/create',
+  timestamp: '2022-11-17T14:28:07.638Z'
+}
+{
+  name: 'JsonWebTokenError',
+  message: 'invalid token',
+  level: 'warn',
+  timestamp: '2022-11-17T14:28:56.640Z'
+}
+{
+  meta: {
+    req: {
+      url: '/api/zones/create',
+      headers: {
+        host: 'localhost:3000',
+        'user-agent': 'insomnia/2022.6.0',
+        'content-type': 'application/json',
+        authorization: 'Bearer eyJhbGciOJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXIiOiJhZG1pbiIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Njg1NDM1MjcsImV4cCI6MTY2ODU0NzEyN30.rxyZHt4Ono7kM08RGGbixlqxj0WUr35M0zRGJIXh5e8',
+        accept: '*/*',
+        'content-length': '192'
+      },
+      method: 'POST',
+      httpVersion: '1.1',
+      originalUrl: '/api/zones/create',
+      query: {}
+    },
+    res: { statusCode: 403 },
+    responseTime: 7
+  },
+  level: 'warn',
+  message: 'HTTP POST /api/zones/create',
+  timestamp: '2022-11-17T14:28:56.651Z'
+}

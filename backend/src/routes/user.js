@@ -131,6 +131,6 @@ userRouter.post("/signIn", userController.signIn);
  *       400:
  *         description: Bad Request, check response body
  */
-userRouter.post("/token", userController.refreshToken);
+userRouter.post("/token", userController.refreshAccessToken);
 
 module.exports = userRouter;
