@@ -7,6 +7,7 @@ import Loader from '../components/Loader'
 import FormContainer from '../components/FormContainer'
 import Cookies from 'js-cookie';
 import { UserContext } from '../context/AuthContext';
+import { createCookie } from "../utils/cookiesUtils";
 
 const LoginScreen = () => {
 
@@ -19,9 +20,9 @@ const LoginScreen = () => {
   const [error, setError] = useState('');
   const [loaded, setLoaded] = useState(false);
 
-  const createCookie = (data) => {
-    Cookies.set("auth", JSON.stringify(data));
-  };
+  // const createCookie = (data) => {
+  //   Cookies.set("auth", JSON.stringify(data));
+  // };
 
   const submitHandler = (e) => {
     e.preventDefault();

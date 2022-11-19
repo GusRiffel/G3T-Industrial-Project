@@ -27,7 +27,7 @@ const Header = ({setValue}) => {
           </LinkContainer>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="ms-auto" onSelect={handleSelect}>
+            <Nav className="ms-auto" >
                 {currentUser ? (
                 <NavDropdown title={currentUser} id='username'>
                   <NavDropdown.Item onClick={logoutHandler}>
@@ -41,7 +41,7 @@ const Header = ({setValue}) => {
                   </Nav.Link>
                 </LinkContainer>
               )}
-              <NavDropdown title='Currency' id='currency'>
+              <NavDropdown title='Currency' id='currency' onSelect={handleSelect}>
                   <NavDropdown.Item eventKey="GBP">
                     GBP
                   </NavDropdown.Item>

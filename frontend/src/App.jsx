@@ -13,6 +13,7 @@ import { AuthContext } from "./context/AuthContext";
 
 function App() {
   const [currency, setCurrency] = useState('GBP');
+  console.log(currency)
 
   return (
     <Router>
