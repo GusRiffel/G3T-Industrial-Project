@@ -127,6 +127,7 @@ const Homescreen = ({ currency }) => {
 
         setSelect(landlines.data, 'landline', currency);
         setSelect(mobiles.data, 'mobile', currency);
+        
       } catch (error) {
         setError(error);
       } finally {

@@ -44,6 +44,7 @@ const ZoneScreen = ({ currency }) => {
               : `Mobile zone ${params.id}`}
           </h2>
         </Col>
+        {params.id != 'Z9' && params.id != 'X' && 
         <Col>
           <h6>Residential {currency}</h6>
           {countries && <h4>{currency == 'GBP'
@@ -52,7 +53,7 @@ const ZoneScreen = ({ currency }) => {
                     ? countries[0].RateUSD
                     : countries[0].RateEU}{' '}
                   {currency == 'GBP' ? 'pence' : 'cents'}</h4>}
-        </Col>
+        </Col>}
       </Row>
       <p>*International OFFnet Pricing By Destination /per Minute</p>
 
