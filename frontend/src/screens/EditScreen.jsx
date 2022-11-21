@@ -8,7 +8,7 @@ import FormContainer from '../components/FormContainer'
 import { UserContext } from '../context/AuthContext';
 import { createCookie } from "../utils/cookiesUtils";
 
-const LoginScreen = () => {
+const EditScreen = () => {
 
   const { createCurrentUser } = useContext(UserContext);
   const navigate = useNavigate();
@@ -19,9 +19,6 @@ const LoginScreen = () => {
   const [error, setError] = useState('');
   const [loaded, setLoaded] = useState(false);
 
-  // const createCookie = (data) => {
-  //   Cookies.set("auth", JSON.stringify(data));
-  // };
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -37,7 +34,7 @@ const LoginScreen = () => {
 
   return (
     <FormContainer>
-      <h1>Sign In</h1>
+      <h1>Edit field</h1>
       {error && <Message variant='danger'>{error}</Message>}
       {loaded && <Loader />}
       <Form onSubmit={submitHandler}>
@@ -69,4 +66,4 @@ const LoginScreen = () => {
   )
 }
 
-export default LoginScreen
+export default EditScreen

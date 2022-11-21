@@ -20,7 +20,7 @@ const ZoneScreen = ({ currency }) => {
   useEffect(() => {
     const loadCountries = async () => {
       try {
-        const countries = await axios.get(`/api/zones/${params.id}`);
+        const countries = await axios.get(`/api/zones/zone/${params.id}`);
 
         setCountries(countries.data);
       } catch (error) {
@@ -68,7 +68,7 @@ const ZoneScreen = ({ currency }) => {
         <tbody>
           {countries &&
             countries.map((country, i) => (
-              <tr key={country.id}>
+              <tr key={i}>
                 <td>{i + 1}</td>
                 <td>{country.Destination}</td>
                 <td>

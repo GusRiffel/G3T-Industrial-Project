@@ -4,12 +4,15 @@ import { getCookie } from "../utils/cookiesUtils";
 export const UserContext = createContext({});
 
 export const AuthContext = ({ children }) => {
+
   const [currentUser, setCurrentUser] = useState("");
+  const [currentToken, setCurrentToken] = useState("");
 
   useEffect(() => {
     const cookieUser = getCookie();
     if (cookieUser) {
       setCurrentUser(cookieUser.user);
+      setCurrentToken(cookieUser.accessToken)
     }
   }, []);
 
@@ -25,6 +28,7 @@ export const AuthContext = ({ children }) => {
     <UserContext.Provider
       value={{
         currentUser,
+        currentToken,
         createCurrentUser,
         deleteCurrentUser,
       }}

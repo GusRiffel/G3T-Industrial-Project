@@ -119,8 +119,8 @@ const Homescreen = ({ currency }) => {
         setLandCountries(null);
         setMobCountries(null);
 
-        const landlines = await axios.get('/api/countries/landline');
-        const mobiles = await axios.get('/api/countries/mobile');
+        const landlines = await axios.get('/api/zones/landline/tariff');
+        const mobiles = await axios.get('/api/zones/mobile/tariff');
 
         setLandline(setZones(landlines.data, currency));
         setMobile(setZones(mobiles.data, currency));
