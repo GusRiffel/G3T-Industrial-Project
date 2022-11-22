@@ -1,16 +1,23 @@
 import React from 'react'
 import { useContext } from 'react'
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
 import { UserContext } from '../context/AuthContext';
 import { removeCookie } from '../utils/cookiesUtils';
 
-const Header = ({setValue}) => {
+const Header = ({setValue, setLoggedIn}) => {
 
   const { currentUser, deleteCurrentUser  } = useContext(UserContext);
+  const navigate = useNavigate();
+  setLoggedIn(currentUser);
 
   const handleSelect = (key) =>{
     setValue(key)
+  }
+
+  const adminHandler = () =>{
+    navigate('/admin')
   }
 
   const logoutHandler = () =>{
@@ -30,6 +37,9 @@ const Header = ({setValue}) => {
             <Nav className="ms-auto" >
                 {currentUser ? (
                 <NavDropdown title={currentUser} id='username'>
+                  <NavDropdown.Item onClick={adminHandler}>
+                    Manage
+                  </NavDropdown.Item>
                   <NavDropdown.Item onClick={logoutHandler}>
                     Logout
                   </NavDropdown.Item>

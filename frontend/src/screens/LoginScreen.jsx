@@ -5,7 +5,6 @@ import { Form, Button} from 'react-bootstrap'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import FormContainer from '../components/FormContainer'
-import Cookies from 'js-cookie';
 import { UserContext } from '../context/AuthContext';
 import { createCookie } from "../utils/cookiesUtils";
 
@@ -53,7 +52,7 @@ const LoginScreen = () => {
         </Form.Group>
 
         <Form.Group controlId='password' className='m-3'>
-          <Form.Label>Password Address</Form.Label>
+          <Form.Label>Password </Form.Label>
           <Form.Control
             type='password'
             placeholder='Enter password'
