@@ -48,8 +48,12 @@ const CreateScreen = () => {
     axios
       .post('http://localhost:3000/api/zones/create', data, config)
       .then((res) => {
+        res.status == '201' ? navigate('/admin') : null; 
+
+      }).catch((err) => {
+        setError(err);
+        window.scrollTo(0,0);
       });
-    navigate('/admin');
   };
 
   return (

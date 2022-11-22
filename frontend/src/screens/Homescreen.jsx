@@ -2,6 +2,8 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { Row, Col, Button, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import Message from '../components/Message';
+import Loader from '../components/Loader';
 import Zone from '../components/Zone';
 import axios from 'axios';
 
@@ -140,6 +142,11 @@ const Homescreen = ({ currency }) => {
 
   return (
     <>
+      {error && <Message variant="danger">{error.message}</Message>}
+      {!loaded ? (
+        <Loader />
+      ) : (
+        <>
       <div className="pb-5">
         <h2 className="bg-primary text-white my-2 p-2">
           Search for Rate by Country
@@ -168,16 +175,16 @@ const Homescreen = ({ currency }) => {
               </Col>
               <Col>
                 <Link to={selectedLand ? `/countries/${selectedLand}` : '/'}>
-                  <Button variant="primary">Go</Button>
+                  <Button variant="primary" >Search</Button>
                 </Link>
               </Col>
             </Row>
             <Row className="mt-3">
               <Col>
                 {landTariff && (
-                  <h5>
+                  <h4>
                      {landTariff} {currency} p/min
-                  </h5>
+                  </h4>
                 )}
               </Col>
             </Row>
@@ -200,16 +207,16 @@ const Homescreen = ({ currency }) => {
               </Col>
               <Col>
                 <Link to={selectedMob ? `/countries/${selectedMob}` : '/'}>
-                  <Button variant="primary">Go</Button>
+                  <Button variant="primary">Search</Button>
                 </Link>
               </Col>
             </Row>
             <Row className="mt-3">
               <Col>
                 {mobTariff && (
-                  <h5>
+                  <h4>
                      {mobTariff} {currency} p/min
-                  </h5>
+                  </h4>
                 )}
               </Col>
             </Row>
@@ -246,6 +253,8 @@ const Homescreen = ({ currency }) => {
           </Col>
         </Row>
       </div>
+      </>
+      )}
     </>
   );
 };

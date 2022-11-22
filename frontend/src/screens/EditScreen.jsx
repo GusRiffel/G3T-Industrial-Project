@@ -24,6 +24,7 @@ const EditScreen = () => {
   const [RateUSD, setRateUSD] = useState('');
   const [error, setError] = useState('');
   const [loaded, setLoaded] = useState(false);
+  const [success, setSuccess] = useState(false);
 
 
   const submitHandler = (e) => {
@@ -48,7 +49,12 @@ const EditScreen = () => {
       RateUSD: RateUSD,
     };
     axios.put(`http://localhost:3000/api/zones/update/${params.id}`, data, config).then((res) => {
-        });
+      res.status == '200' ? setSuccess(true) : null; 
+      window.scrollTo(0,0);
+    }).catch((err) => {
+      setError(err);
+      window.scrollTo(0,0);
+    });
   };
 
   useEffect(() => {
@@ -80,6 +86,7 @@ const EditScreen = () => {
     <FormContainer>
       <h1>Edit field</h1>
       {error && <Message variant='danger'>{error}</Message>}
+      {success && <Message variant="success">{'Record edited successfully'}</Message>}
       {!loaded && <Loader />}
       <Form onSubmit={submitHandler}>
         <Form.Group controlId="key" className="m-3">
