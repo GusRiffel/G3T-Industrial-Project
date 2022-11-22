@@ -10,7 +10,7 @@ import CountryScreen from './screens/CountryScreen';
 import LoginScreen from './screens/LoginScreen';
 import AdminScreen from './screens/AdminScreen';
 import CreateScreen from './screens/CreateScreen';
-import EditScreen from './screens/AdminScreen';
+import EditScreen from './screens/EditScreen';
 import { AuthContext } from "./context/AuthContext";
 
 
@@ -28,7 +28,7 @@ function App() {
             <Route path='/' element={<HomeScreen currency={currency}/>} />
             <Route path='/admin' element={<AdminScreen />} />
             <Route path='/create' element={<CreateScreen />} />
-            <Route path='/edit' element={<EditScreen />} />
+            <Route path='/edit/:id' element={<EditScreen />} />
             <Route path='/zones/:id' element={<ZoneScreen currency={currency}/>} />
             <Route path='/countries/:id' element={<CountryScreen currency={currency}/>} />
             <Route path='/login' element={<LoginScreen />} />
