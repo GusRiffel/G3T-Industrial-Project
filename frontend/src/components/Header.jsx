@@ -6,10 +6,11 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { UserContext } from '../context/AuthContext';
 import { removeCookie } from '../utils/cookiesUtils';
 
-const Header = ({setValue}) => {
+const Header = ({setValue, setLoggedIn}) => {
 
   const { currentUser, deleteCurrentUser  } = useContext(UserContext);
   const navigate = useNavigate();
+  setLoggedIn(currentUser);
 
   const handleSelect = (key) =>{
     setValue(key)
