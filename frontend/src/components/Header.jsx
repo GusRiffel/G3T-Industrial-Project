@@ -6,7 +6,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { UserContext } from '../context/AuthContext';
 import { removeCookie } from '../utils/cookiesUtils';
 
-const Header = ({setValue, setLoggedIn}) => {
+const Header = ({setValue, setLoggedIn, currency}) => {
 
   const { currentUser, deleteCurrentUser  } = useContext(UserContext);
   const navigate = useNavigate();
@@ -35,7 +35,19 @@ const Header = ({setValue, setLoggedIn}) => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto" >
-                {currentUser ? (
+                
+              <NavDropdown title={currency} id='currency' onSelect={handleSelect}>
+                  <NavDropdown.Item eventKey="GBP">
+                    GBP
+                  </NavDropdown.Item>
+                  <NavDropdown.Item eventKey="USD">
+                    USD
+                  </NavDropdown.Item>
+                  <NavDropdown.Item eventKey="EU">
+                    EU
+                  </NavDropdown.Item>
+              </NavDropdown>
+              {currentUser ? (
                 <NavDropdown title={currentUser} id='username'>
                   <NavDropdown.Item onClick={adminHandler}>
                     Manage
@@ -51,17 +63,6 @@ const Header = ({setValue, setLoggedIn}) => {
                   </Nav.Link>
                 </LinkContainer>
               )}
-              <NavDropdown title='Currency' id='currency' onSelect={handleSelect}>
-                  <NavDropdown.Item eventKey="GBP">
-                    GBP
-                  </NavDropdown.Item>
-                  <NavDropdown.Item eventKey="USD">
-                    USD
-                  </NavDropdown.Item>
-                  <NavDropdown.Item eventKey="EU">
-                    EU
-                  </NavDropdown.Item>
-                </NavDropdown>
             </Nav>
           </Navbar.Collapse>
         </Container>

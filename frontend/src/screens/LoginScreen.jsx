@@ -29,10 +29,14 @@ const LoginScreen = () => {
     const config = { headers: {"Content-Type":"application/json"}};
     const data = { user: user, password: password };
     axios.post('http://localhost:3000/api/user/signIn', data, config).then((res) => {
+        
         createCookie(res.data);
         createCurrentUser(res.data.user);
+        navigate("/");
+        }).catch(err => {
+          //console.log(err);
+          setError("Wrong username or password, please try again!")
         });
-    navigate("/");
   };
 
   return (

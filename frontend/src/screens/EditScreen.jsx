@@ -15,7 +15,7 @@ const EditScreen = () => {
 
   const [key, setKey] = useState('');
   const [destination, setDestination] = useState('');
-  const [MAGCode, setMAGCode] = useState('');
+  //const [MAGCode, setMAGCode] = useState('');
   const [MAGDestination, setMAGDestination] = useState('');
   const [zone, setZone] = useState('');
   const [RateBusinessGBP, setRateBusinessGBP] = useState('');
@@ -38,7 +38,7 @@ const EditScreen = () => {
       },
     };
     const data = {
-      MAGCode: MAGCode,
+      MAGCode: key,
       MAGDestination: MAGDestination,
       Destination: destination,
       Key: key,
@@ -64,7 +64,7 @@ const EditScreen = () => {
 
         setKey(record.data.Key)
         setDestination(record.data.Destination)
-        setMAGCode(record.data.MAGCode)
+        //setMAGCode(record.data.MAGCode)
         setMAGDestination(record.data.MAGDestination)
         setZone(record.data.Zone)
         setRateBusinessGBP(record.data.RateBusinessGBP)
@@ -89,8 +89,8 @@ const EditScreen = () => {
       {success && <Message variant="success">{'Record edited successfully'}</Message>}
       {!loaded && <Loader />}
       <Form onSubmit={submitHandler}>
-        <Form.Group controlId="key" className="m-3">
-          <Form.Label>Key</Form.Label>
+        <Form.Group controlId="keyMAGCode" className="m-3">
+          <Form.Label>Key & MAGCode</Form.Label>
           <Form.Control
             type="key"
             placeholder="Enter Key"
@@ -109,7 +109,7 @@ const EditScreen = () => {
           ></Form.Control>
         </Form.Group>
 
-        <Form.Group controlId="MAGCode" className="m-3">
+        {/* <Form.Group controlId="MAGCode" className="m-3">
           <Form.Label>MAGCode</Form.Label>
           <Form.Control
             type="MAGCode"
@@ -117,7 +117,7 @@ const EditScreen = () => {
             value={MAGCode}
             onChange={(e) => setMAGCode(e.target.value)}
           ></Form.Control>
-        </Form.Group>
+        </Form.Group> */}
 
         <Form.Group controlId="MAGDestination" className="m-3">
           <Form.Label>MAGDestination</Form.Label>

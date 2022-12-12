@@ -18,12 +18,11 @@ import Protected from './components/Protected';
 function App() {
   const [currency, setCurrency] = useState('GBP');
   const [user, setUser] = useState('');
-  console.log(user)
 
   return (
     <Router>
       <AuthContext>
-      <Header setValue={setCurrency} setLoggedIn={setUser}/>
+      <Header setValue={setCurrency} setLoggedIn={setUser} currency={currency}/>
       <main className="py-3">
         <Container>
           <Routes>
@@ -35,7 +34,7 @@ function App() {
             <Route path='/countries/:id' element={<CountryScreen currency={currency}/>} />
             <Route path='/login' element={<LoginScreen />} />
           </Routes>
-        </Container>
+        </Container> 
       </main>
       <Footer />
       </AuthContext>

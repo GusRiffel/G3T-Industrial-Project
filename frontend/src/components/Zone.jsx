@@ -3,6 +3,9 @@ import { Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 const Zone = ({ zone, curr }) => {
+
+  let limit = (curr === 'GBP') ? 0.18 : (curr === 'EU') ? 0.27 : 0.32;
+
   return (
     <Card className="my-3 p-3 rounded">
       <Card.Body>
@@ -15,7 +18,7 @@ const Zone = ({ zone, curr }) => {
         }
 
         <Card.Text as="h6">
-          {parseFloat(zone.tariff) <= 0.18 ? zone.tariff : 'Over 0.18'} {curr} {' '}
+          {parseFloat(zone.tariff) <= limit ? zone.tariff : `Over ${limit}`} {curr} {' '}
           p/min
         </Card.Text>
       </Card.Body>

@@ -148,7 +148,7 @@ const Homescreen = ({ currency }) => {
       ) : (
         <>
       <div className="pb-5">
-        <h2 className="bg-primary text-white my-2 p-2">
+        <h2 className="bg-primary text-white my-2 p-2 text-center">
           Search for Rate by Country
         </h2>
         <p>
@@ -224,29 +224,29 @@ const Homescreen = ({ currency }) => {
         </Row>
       </div>
       <div className="mt-5">
-        <h2 className="bg-primary text-white my-2 p-2">
+        <h2 className="bg-primary text-white my-2 p-2 text-center">
           Search for Destinations by Zone
         </h2>
         <Row>
           <Col>
-            <h3>Landline zones</h3>
+            <h3 className="text-center">Landline zones</h3>
             <Row>
               {landline &&
                 landline.map((zone, i) => (
                   <Col key={i} className="col-sm-4">
-                    <Zone zone={zone} curr={currency} />
+                    <Zone zone={zone} curr={currency}/>
                   </Col>
                 ))}
             </Row>
           </Col>
 
           <Col>
-            <h3>Mobile zones</h3>
+            <h3 className="text-center">Mobile zones</h3>
             <Row>
               {mobile &&
                 mobile.map((zone, i) => (
                   <Col key={i} className="col-sm-4">
-                    <Zone zone={zone} curr={currency} />
+                    <Zone zone={zone} curr={currency}/>
                   </Col>
                 ))}
             </Row>
